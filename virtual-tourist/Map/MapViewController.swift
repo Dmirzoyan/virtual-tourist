@@ -17,12 +17,18 @@ final class MapViewController: UIViewController {
     var locationManager: CLLocationManager!
     var feedbackGenerator: UIImpactFeedbackGenerator!
     
+    private let popupView = PopupView()
+    private let popupOffset: CGFloat = 440
+    private var popupViewAnimator: PopupViewAnimating!
+    private lazy var tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap(recognizer:)))
+    
     @IBOutlet weak var mapView: GMSMapView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         setupMapView()
+        setupPopupView()
         locationManager.requestWhenInUseAuthorization()
     }
     
@@ -43,6 +49,21 @@ final class MapViewController: UIViewController {
         }
         
         mapView.mapStyle = try? GMSMapStyle(contentsOfFileURL: styleURL)
+    }
+    
+    private func setupPopupView() {
+        popupViewAnimator = PopupViewAnimator(
+            hostView: view,
+            popupView: popupView,
+            initialState: .closed,
+            offset: popupOffset
+        )
+        popupView.addGestureRecognizer(tapRecognizer)
+    }
+    
+    @objc
+    private func handleTap(recognizer: UITapGestureRecognizer) {
+        popupViewAnimator.animateTransitionIfNeeded(duration: 1)
     }
 }
 

@@ -3,11 +3,14 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		8A80122F285BE52C7B3C3588 /* Pods_virtual_tourist.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E8867ED2180A25A373BD78E /* Pods_virtual_tourist.framework */; };
+		AC45934522D0D6700061EBD8 /* PopupState.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC45934422D0D6700061EBD8 /* PopupState.swift */; };
+		AC45934722D0DACE0061EBD8 /* PopupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC45934622D0DACE0061EBD8 /* PopupView.swift */; };
+		AC45934922D0DC5E0061EBD8 /* PopupViewAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC45934822D0DC5E0061EBD8 /* PopupViewAnimator.swift */; };
 		AC4708CF22C0AED400147E5C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC4708CE22C0AED400147E5C /* AppDelegate.swift */; };
 		AC4708D722C0AED400147E5C /* virtual_tourist.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = AC4708D522C0AED400147E5C /* virtual_tourist.xcdatamodeld */; };
 		AC4708D922C0AED900147E5C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AC4708D822C0AED900147E5C /* Assets.xcassets */; };
@@ -24,6 +27,9 @@
 
 /* Begin PBXFileReference section */
 		4E8867ED2180A25A373BD78E /* Pods_virtual_tourist.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_virtual_tourist.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		AC45934422D0D6700061EBD8 /* PopupState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopupState.swift; sourceTree = "<group>"; };
+		AC45934622D0DACE0061EBD8 /* PopupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopupView.swift; sourceTree = "<group>"; };
+		AC45934822D0DC5E0061EBD8 /* PopupViewAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopupViewAnimator.swift; sourceTree = "<group>"; };
 		AC4708CB22C0AED400147E5C /* virtual-tourist.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "virtual-tourist.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		AC4708CE22C0AED400147E5C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		AC4708D622C0AED400147E5C /* virtual_tourist.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = virtual_tourist.xcdatamodel; sourceTree = "<group>"; };
@@ -54,6 +60,24 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		AC45934222D0D6170061EBD8 /* Popup Animator */ = {
+			isa = PBXGroup;
+			children = (
+				AC45934322D0D65F0061EBD8 /* State */,
+				AC45934622D0DACE0061EBD8 /* PopupView.swift */,
+				AC45934822D0DC5E0061EBD8 /* PopupViewAnimator.swift */,
+			);
+			path = "Popup Animator";
+			sourceTree = "<group>";
+		};
+		AC45934322D0D65F0061EBD8 /* State */ = {
+			isa = PBXGroup;
+			children = (
+				AC45934422D0D6700061EBD8 /* PopupState.swift */,
+			);
+			path = State;
+			sourceTree = "<group>";
+		};
 		AC4708C222C0AED400147E5C = {
 			isa = PBXGroup;
 			children = (
@@ -75,6 +99,7 @@
 		AC4708CD22C0AED400147E5C /* virtual-tourist */ = {
 			isa = PBXGroup;
 			children = (
+				AC45934222D0D6170061EBD8 /* Popup Animator */,
 				AC4708E322C0AF7000147E5C /* Map */,
 				AC4708CE22C0AED400147E5C /* AppDelegate.swift */,
 				AC4708D822C0AED900147E5C /* Assets.xcassets */,
@@ -251,11 +276,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AC45934522D0D6700061EBD8 /* PopupState.swift in Sources */,
 				AC4708ED22C0AF9600147E5C /* MapRouterFactory.swift in Sources */,
 				AC4708F022C0AF9600147E5C /* MapPresenter.swift in Sources */,
+				AC45934722D0DACE0061EBD8 /* PopupView.swift in Sources */,
 				AC4708CF22C0AED400147E5C /* AppDelegate.swift in Sources */,
 				AC4708EB22C0AF9600147E5C /* MapViewController.swift in Sources */,
 				AC4708EE22C0AF9600147E5C /* MapInteractor.swift in Sources */,
+				AC45934922D0DC5E0061EBD8 /* PopupViewAnimator.swift in Sources */,
 				AC4708D722C0AED400147E5C /* virtual_tourist.xcdatamodeld in Sources */,
 				AC4708F122C0AF9600147E5C /* MapDisplayFactory.swift in Sources */,
 				AC4708EF22C0AF9600147E5C /* MapRouter.swift in Sources */,
