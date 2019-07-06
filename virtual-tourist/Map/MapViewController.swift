@@ -70,12 +70,22 @@ extension MapViewController: GMSMapViewDelegate {
     func mapView(_ mapView: GMSMapView, didLongPressAt coordinate: CLLocationCoordinate2D) {
         feedbackGenerator.impactOccurred()
         
+        addMarker(at: coordinate)
+        
         reverseGeocodeCoordinate(coordinate) { [weak self] success, address in
             guard success == true
             else { return }
             
             self?.showAlert(message: address)
         }
+    }
+    
+    private func addMarker(at coordinate: CLLocationCoordinate2D) {
+        let position = CLLocationCoordinate2D(latitude: coordinate.latitude, longitude: coordinate.longitude)
+        let marker = GMSMarker(position: position)
+        
+        marker.icon = UIImage(named: "marker")
+        marker.map = mapView
     }
     
     private func reverseGeocodeCoordinate(
