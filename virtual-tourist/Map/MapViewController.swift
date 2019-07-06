@@ -62,7 +62,6 @@ extension MapViewController: CLLocationManagerDelegate {
         mapView.camera = GMSCameraPosition(target: location.coordinate, zoom: 12, bearing: 0, viewingAngle: 0)
         
         locationManager.stopUpdatingLocation()
-//        fetchNearbyPlaces(coordinate: location.coordinate)
     }
 }
 
@@ -71,7 +70,32 @@ extension MapViewController: GMSMapViewDelegate {
     func mapView(_ mapView: GMSMapView, didLongPressAt coordinate: CLLocationCoordinate2D) {
         feedbackGenerator.impactOccurred()
         
-        let controller = UIAlertController(title: "Coordinates", message: "Long: \(coordinate.longitude), Lat: \(coordinate.latitude)", preferredStyle: .alert)
+        reverseGeocodeCoordinate(coordinate) { [weak self] success, address in
+            guard success == true
+            else { return }
+            
+            self?.showAlert(message: address)
+        }
+    }
+    
+    private func reverseGeocodeCoordinate(
+        _ coordinate: CLLocationCoordinate2D,
+        completion: @escaping (Bool, String) -> Void
+    ) {
+        let geocoder = GMSGeocoder()
+        
+        geocoder.reverseGeocodeCoordinate(coordinate) { response, error in
+            guard let address = response?.firstResult(), let lines = address.lines else {
+                completion(false, "")
+                return
+            }
+            
+            completion(true, lines.joined(separator: "\n"))
+        }
+    }
+    
+    private func showAlert(message: String) {
+        let controller = UIAlertController(title: "Address", message: message, preferredStyle: .alert)
         controller.addAction(UIAlertAction(title: "Dismiss", style: .cancel, handler: nil))
         present(controller, animated: true, completion: nil)
     }
