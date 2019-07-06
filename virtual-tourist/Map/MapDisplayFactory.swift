@@ -26,6 +26,7 @@ final class MapDisplayFactory: MapDisplayProducing {
         
         viewController.interactor = interactor
         viewController.locationManager = CLLocationManager()
+        viewController.feedbackGenerator = UIImpactFeedbackGenerator(style: .medium)
         
         return viewController
     }

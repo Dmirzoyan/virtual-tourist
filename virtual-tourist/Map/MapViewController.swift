@@ -15,6 +15,7 @@ final class MapViewController: UIViewController {
 
     var interactor: MapInteracting!
     var locationManager: CLLocationManager!
+    var feedbackGenerator: UIImpactFeedbackGenerator!
     
     @IBOutlet weak var mapView: GMSMapView!
     
@@ -68,6 +69,8 @@ extension MapViewController: CLLocationManagerDelegate {
 extension MapViewController: GMSMapViewDelegate {
     
     func mapView(_ mapView: GMSMapView, didLongPressAt coordinate: CLLocationCoordinate2D) {
+        feedbackGenerator.impactOccurred()
+        
         let controller = UIAlertController(title: "Coordinates", message: "Long: \(coordinate.longitude), Lat: \(coordinate.latitude)", preferredStyle: .alert)
         controller.addAction(UIAlertAction(title: "Dismiss", style: .cancel, handler: nil))
         present(controller, animated: true, completion: nil)
