@@ -11,6 +11,8 @@
 		AC45934522D0D6700061EBD8 /* PopupState.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC45934422D0D6700061EBD8 /* PopupState.swift */; };
 		AC45934722D0DACE0061EBD8 /* PopupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC45934622D0DACE0061EBD8 /* PopupView.swift */; };
 		AC45934922D0DC5E0061EBD8 /* PopupViewAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC45934822D0DC5E0061EBD8 /* PopupViewAnimator.swift */; };
+		AC45934D22D1D4DF0061EBD8 /* PopupTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = AC45934C22D1D4DF0061EBD8 /* PopupTableViewCell.xib */; };
+		AC45934F22D1D4EF0061EBD8 /* PopupTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC45934E22D1D4EF0061EBD8 /* PopupTableViewCell.swift */; };
 		AC4708CF22C0AED400147E5C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC4708CE22C0AED400147E5C /* AppDelegate.swift */; };
 		AC4708D722C0AED400147E5C /* virtual_tourist.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = AC4708D522C0AED400147E5C /* virtual_tourist.xcdatamodeld */; };
 		AC4708D922C0AED900147E5C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AC4708D822C0AED900147E5C /* Assets.xcassets */; };
@@ -30,6 +32,8 @@
 		AC45934422D0D6700061EBD8 /* PopupState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopupState.swift; sourceTree = "<group>"; };
 		AC45934622D0DACE0061EBD8 /* PopupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopupView.swift; sourceTree = "<group>"; };
 		AC45934822D0DC5E0061EBD8 /* PopupViewAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopupViewAnimator.swift; sourceTree = "<group>"; };
+		AC45934C22D1D4DF0061EBD8 /* PopupTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PopupTableViewCell.xib; sourceTree = "<group>"; };
+		AC45934E22D1D4EF0061EBD8 /* PopupTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopupTableViewCell.swift; sourceTree = "<group>"; };
 		AC4708CB22C0AED400147E5C /* virtual-tourist.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "virtual-tourist.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		AC4708CE22C0AED400147E5C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		AC4708D622C0AED400147E5C /* virtual_tourist.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = virtual_tourist.xcdatamodel; sourceTree = "<group>"; };
@@ -64,7 +68,6 @@
 			isa = PBXGroup;
 			children = (
 				AC45934322D0D65F0061EBD8 /* State */,
-				AC45934622D0DACE0061EBD8 /* PopupView.swift */,
 				AC45934822D0DC5E0061EBD8 /* PopupViewAnimator.swift */,
 			);
 			path = "Popup Animator";
@@ -76,6 +79,24 @@
 				AC45934422D0D6700061EBD8 /* PopupState.swift */,
 			);
 			path = State;
+			sourceTree = "<group>";
+		};
+		AC45934A22D1D43E0061EBD8 /* Popup */ = {
+			isa = PBXGroup;
+			children = (
+				AC45934B22D1D4B50061EBD8 /* Cell */,
+				AC45934622D0DACE0061EBD8 /* PopupView.swift */,
+			);
+			path = Popup;
+			sourceTree = "<group>";
+		};
+		AC45934B22D1D4B50061EBD8 /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				AC45934C22D1D4DF0061EBD8 /* PopupTableViewCell.xib */,
+				AC45934E22D1D4EF0061EBD8 /* PopupTableViewCell.swift */,
+			);
+			path = Cell;
 			sourceTree = "<group>";
 		};
 		AC4708C222C0AED400147E5C = {
@@ -99,6 +120,7 @@
 		AC4708CD22C0AED400147E5C /* virtual-tourist */ = {
 			isa = PBXGroup;
 			children = (
+				AC45934A22D1D43E0061EBD8 /* Popup */,
 				AC45934222D0D6170061EBD8 /* Popup Animator */,
 				AC4708E322C0AF7000147E5C /* Map */,
 				AC4708CE22C0AED400147E5C /* AppDelegate.swift */,
@@ -206,6 +228,7 @@
 				AC4708DC22C0AED900147E5C /* LaunchScreen.storyboard in Resources */,
 				AC4708EC22C0AF9600147E5C /* MapViewController.xib in Resources */,
 				AC4708F322C1628C00147E5C /* MapStyle.geojson in Resources */,
+				AC45934D22D1D4DF0061EBD8 /* PopupTableViewCell.xib in Resources */,
 				AC4708D922C0AED900147E5C /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -282,6 +305,7 @@
 				AC45934722D0DACE0061EBD8 /* PopupView.swift in Sources */,
 				AC4708CF22C0AED400147E5C /* AppDelegate.swift in Sources */,
 				AC4708EB22C0AF9600147E5C /* MapViewController.swift in Sources */,
+				AC45934F22D1D4EF0061EBD8 /* PopupTableViewCell.swift in Sources */,
 				AC4708EE22C0AF9600147E5C /* MapInteractor.swift in Sources */,
 				AC45934922D0DC5E0061EBD8 /* PopupViewAnimator.swift in Sources */,
 				AC4708D722C0AED400147E5C /* virtual_tourist.xcdatamodeld in Sources */,
