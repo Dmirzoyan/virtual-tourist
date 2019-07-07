@@ -7,16 +7,19 @@
 //
 
 enum PopupState {
-    case open, closed
+    case open, preview, closed
 }
 
 extension PopupState {
-    var opposite: PopupState {
+    
+    var next: PopupState {
         switch self {
+        case .closed:
+            return .preview
+        case .preview:
+            return .open
         case .open:
             return .closed
-        case .closed:
-            return .open
         }
     }
 }

@@ -9,7 +9,7 @@
 import UIKit
 
 protocol PopupViewAnimating {
-    func animateTransitionIfNeeded(duration: TimeInterval)
+    func animateTransitionIfNeeded(offset: CGFloat, duration: TimeInterval)
 }
 
 final class PopupViewAnimator: PopupViewAnimating {
@@ -17,15 +17,15 @@ final class PopupViewAnimator: PopupViewAnimating {
     private var animator: UIViewPropertyAnimator!
     private let hostView: UIView
     private let popupView: PopupView
-    private let offset: CGFloat
     private var state: PopupState
+    private let popupViewHeight: CGFloat
     private var bottomConstraint = NSLayoutConstraint()
     
-    init(hostView: UIView, popupView: PopupView, initialState: PopupState, offset: CGFloat) {
+    init(hostView: UIView, popupView: PopupView, popupViewHeight: CGFloat, initialState: PopupState) {
         self.hostView = hostView
         self.popupView = popupView
+        self.popupViewHeight = popupViewHeight
         self.state = initialState
-        self.offset = offset
         
         layout()
     }
@@ -34,24 +34,27 @@ final class PopupViewAnimator: PopupViewAnimating {
         popupView.translatesAutoresizingMaskIntoConstraints = false
         hostView.addSubview(popupView)
         
-        bottomConstraint = popupView.bottomAnchor.constraint(equalTo: hostView.bottomAnchor, constant: offset)
+        bottomConstraint = popupView.bottomAnchor.constraint(equalTo: hostView.bottomAnchor, constant: popupViewHeight)
         
         NSLayoutConstraint.activate([
             popupView.leadingAnchor.constraint(equalTo: hostView.leadingAnchor),
             popupView.trailingAnchor.constraint(equalTo: hostView.trailingAnchor),
             bottomConstraint,
-            popupView.heightAnchor.constraint(equalToConstant: 500),
+            popupView.heightAnchor.constraint(equalToConstant: popupViewHeight),
         ])
     }
     
-    func animateTransitionIfNeeded(duration: TimeInterval) {
+    func animateTransitionIfNeeded(offset: CGFloat, duration: TimeInterval) {
         animator = UIViewPropertyAnimator(duration: duration, dampingRatio: 1, animations: {
-            switch self.state.opposite {
+            switch self.state.next {
+            case .preview:
+                self.bottomConstraint.constant = self.popupViewHeight - offset
+                self.popupView.layer.cornerRadius = 20
             case .open:
                 self.bottomConstraint.constant = 0
                 self.popupView.layer.cornerRadius = 20
             case .closed:
-                self.bottomConstraint.constant = self.offset
+                self.bottomConstraint.constant = self.popupViewHeight
                 self.popupView.layer.cornerRadius = 0
             }
             self.hostView.layoutIfNeeded()
@@ -61,7 +64,7 @@ final class PopupViewAnimator: PopupViewAnimating {
             guard let strongSelf = self
             else { return }
             
-            strongSelf.state = strongSelf.state.opposite
+            strongSelf.state = strongSelf.state.next
         }
         animator.startAnimation()
     }

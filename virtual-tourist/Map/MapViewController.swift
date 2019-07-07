@@ -18,7 +18,8 @@ final class MapViewController: UIViewController {
     var feedbackGenerator: UIImpactFeedbackGenerator!
     
     private let popupView = PopupView()
-    private let popupOffset: CGFloat = 440
+    private let popupViewHeight: CGFloat = 500
+    private let popupOffset: CGFloat = 100
     private var popupViewAnimator: PopupViewAnimating!
     private lazy var tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap(recognizer:)))
     
@@ -55,15 +56,15 @@ final class MapViewController: UIViewController {
         popupViewAnimator = PopupViewAnimator(
             hostView: view,
             popupView: popupView,
-            initialState: .closed,
-            offset: popupOffset
+            popupViewHeight: popupViewHeight,
+            initialState: .closed
         )
         popupView.addGestureRecognizer(tapRecognizer)
     }
     
     @objc
     private func handleTap(recognizer: UITapGestureRecognizer) {
-        popupViewAnimator.animateTransitionIfNeeded(duration: 1)
+        popupViewAnimator.animateTransitionIfNeeded(offset: popupOffset, duration: 0.5)
     }
 }
 
@@ -93,11 +94,14 @@ extension MapViewController: GMSMapViewDelegate {
         
         addMarker(at: coordinate)
         
-        reverseGeocodeCoordinate(coordinate) { [weak self] success, address in
-            guard success == true
+        reverseGeocodeCoordinate(coordinate) { [weak self] success, street, city in
+            guard
+                let strongSelf = self,
+                success == true
             else { return }
             
-            self?.showAlert(message: address)
+            strongSelf.popupView.set(street: street, city: city)
+            strongSelf.popupViewAnimator.animateTransitionIfNeeded(offset: strongSelf.popupOffset, duration: 0.5)
         }
     }
     
@@ -111,24 +115,23 @@ extension MapViewController: GMSMapViewDelegate {
     
     private func reverseGeocodeCoordinate(
         _ coordinate: CLLocationCoordinate2D,
-        completion: @escaping (Bool, String) -> Void
+        completion: @escaping (Bool, String, String) -> Void
     ) {
         let geocoder = GMSGeocoder()
         
         geocoder.reverseGeocodeCoordinate(coordinate) { response, error in
-            guard let address = response?.firstResult(), let lines = address.lines else {
-                completion(false, "")
+            guard
+                let address = response?.firstResult(),
+                let street = address.thoroughfare,
+                let city = address.locality,
+                let country = address.country
+            else {
+                completion(false, "", "")
                 return
             }
             
-            completion(true, lines.joined(separator: "\n"))
+            completion(true, street, "\(city), \(country)");
         }
-    }
-    
-    private func showAlert(message: String) {
-        let controller = UIAlertController(title: "Address", message: message, preferredStyle: .alert)
-        controller.addAction(UIAlertAction(title: "Dismiss", style: .cancel, handler: nil))
-        present(controller, animated: true, completion: nil)
     }
 }
 
