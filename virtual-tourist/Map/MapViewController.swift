@@ -19,9 +19,8 @@ final class MapViewController: UIViewController {
     
     private let popupView = PopupView()
     private let popupViewHeight: CGFloat = 500
-    private let popupOffset: CGFloat = 100
+    private let popupPreviewHeight: CGFloat = 100
     private var popupViewAnimator: PopupViewAnimating!
-    private lazy var tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap(recognizer:)))
     
     private var mapMarkers: [GMSMarker] = []
     let markerIcon = UIImage(named: "marker")
@@ -60,14 +59,9 @@ final class MapViewController: UIViewController {
             hostView: view,
             popupView: popupView,
             popupViewHeight: popupViewHeight,
+            popupPreviewHeight: popupPreviewHeight,
             initialState: .closed
         )
-        popupView.addGestureRecognizer(tapRecognizer)
-    }
-    
-    @objc
-    private func handleTap(recognizer: UITapGestureRecognizer) {
-        popupViewAnimator.animateTransitionIfNeeded(offset: popupOffset, duration: 0.5)
     }
 }
 
@@ -100,6 +94,10 @@ extension MapViewController: GMSMapViewDelegate {
         return true
     }
     
+    func mapView(_ mapView: GMSMapView, didTapAt coordinate: CLLocationCoordinate2D) {
+        popupViewAnimator.animateTransitionIfNeeded(to: PopupState.closed, duration: 0.8)
+    }
+    
     func mapView(_ mapView: GMSMapView, didLongPressAt coordinate: CLLocationCoordinate2D) {
         let position = CLLocationCoordinate2D(latitude: coordinate.latitude, longitude: coordinate.longitude)
         
@@ -114,7 +112,7 @@ extension MapViewController: GMSMapViewDelegate {
             else { return }
             
             strongSelf.popupView.set(street: street, city: city)
-            strongSelf.popupViewAnimator.animateTransitionIfNeeded(offset: strongSelf.popupOffset, duration: 0.5)
+            strongSelf.popupViewAnimator.animateTransitionIfNeeded(to: PopupState.preview, duration: 0.8)
         }
     }
     

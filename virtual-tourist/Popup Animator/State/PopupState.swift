@@ -19,7 +19,7 @@ extension PopupState {
         case .preview:
             return .open
         case .open:
-            return .closed
+            return .preview
         }
     }
 }
