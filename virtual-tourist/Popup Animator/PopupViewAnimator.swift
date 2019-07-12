@@ -53,8 +53,8 @@ final class PopupViewAnimator: PopupViewAnimating {
         bottomConstraint = popupView.bottomAnchor.constraint(equalTo: hostView.bottomAnchor, constant: popupViewHeight)
         
         NSLayoutConstraint.activate([
-            popupView.leadingAnchor.constraint(equalTo: hostView.leadingAnchor),
-            popupView.trailingAnchor.constraint(equalTo: hostView.trailingAnchor),
+            popupView.leadingAnchor.constraint(equalTo: hostView.leadingAnchor, constant: 5),
+            popupView.trailingAnchor.constraint(equalTo: hostView.trailingAnchor, constant: -5),
             bottomConstraint,
             popupView.heightAnchor.constraint(equalToConstant: popupViewHeight),
         ])

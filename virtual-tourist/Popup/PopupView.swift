@@ -17,15 +17,13 @@ final class PopupView: UIView {
     
     private var streetTextAttributes: [NSAttributedString.Key: Any] {
         return [
-//            NSAttributedString.Key.foregroundColor: UIColor.white,
-            NSAttributedString.Key.font: UIFont(name: "Arial-BoldMT", size: 18)!
+            NSAttributedString.Key.font: UIFont(name: "Noteworthy-Bold", size: 18)!
         ]
     }
     
     private var cityTextAttributes: [NSAttributedString.Key: Any] {
         return [
-            //            NSAttributedString.Key.foregroundColor: UIColor.white,
-            NSAttributedString.Key.font: UIFont(name: "ArialMT", size: 15)!
+            NSAttributedString.Key.font: UIFont(name: "Noteworthy-Light", size: 15)!
         ]
     }
     
@@ -82,7 +80,7 @@ final class PopupView: UIView {
             streetLabel.widthAnchor.constraint(equalToConstant: 300),
             streetLabel.topAnchor.constraint(equalTo: titleContainer.topAnchor),
             cityLabel.widthAnchor.constraint(equalTo: streetLabel.widthAnchor),
-            cityLabel.topAnchor.constraint(equalTo: streetLabel.bottomAnchor, constant: 3),
+            cityLabel.topAnchor.constraint(equalTo: streetLabel.bottomAnchor),
             cityLabel.bottomAnchor.constraint(equalTo: titleContainer.bottomAnchor),
         ])
     }

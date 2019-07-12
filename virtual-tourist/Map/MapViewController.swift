@@ -21,6 +21,10 @@ final class MapViewController: UIViewController {
     private let popupViewHeight: CGFloat = 500
     private let popupPreviewHeight: CGFloat = 100
     private var popupViewAnimator: PopupViewAnimating!
+    private var mapOverlay: GMSCircle?
+    private var mapOverlayOpacity: CGFloat = 0.5
+    private let initialZoom: Float = 13
+    private let minOverlayZoom: Float = 7
     
     private var mapMarkers: [GMSMarker] = []
     let markerIcon = UIImage(named: "marker")
@@ -40,8 +44,9 @@ final class MapViewController: UIViewController {
         
         mapView.isMyLocationEnabled = true
         mapView.settings.myLocationButton = true
-        locationManager.delegate = self
         mapView.delegate = self
+        mapView.animate(toZoom: initialZoom)
+        locationManager.delegate = self
     }
     
     private func setupMapStyle() {
@@ -78,8 +83,13 @@ extension MapViewController: CLLocationManagerDelegate {
         guard let location = locations.first
         else { return }
         
-        mapView.camera = GMSCameraPosition(target: location.coordinate, zoom: 12, bearing: 0, viewingAngle: 0)
-        
+        mapView.camera = GMSCameraPosition(
+            target: location.coordinate,
+            zoom: initialZoom,
+            bearing: 0,
+            viewingAngle: 0
+        )
+
         locationManager.stopUpdatingLocation()
     }
 }
@@ -114,6 +124,27 @@ extension MapViewController: GMSMapViewDelegate {
             strongSelf.popupView.set(street: street, city: city)
             strongSelf.popupViewAnimator.animateTransitionIfNeeded(to: PopupState.preview, duration: 0.8)
         }
+    }
+    
+    func mapView(_ mapView: GMSMapView, didChange position: GMSCameraPosition) {
+        mapOverlay?.map = nil
+        
+        guard position.zoom > minOverlayZoom
+        else { return }
+
+        mapOverlay = GMSCircle(position: position.target, radius: 2000000)
+        mapOverlay?.fillColor = UIColor(red: 133/256, green: 113/256, blue: 217/256, alpha: opacity(for: position.zoom))
+        mapOverlay?.map = mapView
+    }
+    
+    private func opacity(for zoom: Float) -> CGFloat {
+        var opacity: CGFloat = mapOverlayOpacity
+        
+        if zoom <= minOverlayZoom + 1 {
+            opacity = CGFloat(zoom - minOverlayZoom) / 2
+        }
+        
+        return opacity
     }
     
     private func addMarker(at position: CLLocationCoordinate2D) {
