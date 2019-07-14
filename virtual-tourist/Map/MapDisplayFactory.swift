@@ -3,7 +3,7 @@
 //  virtual-tourist
 //
 //  Created by Davit Mirzoyan on 6/24/19.
-//  Copyright © 2019 Udacity. All rights reserved.
+//  Copyright © 2019. All rights reserved.
 //
 
 import UIKit
@@ -21,12 +21,24 @@ final class MapDisplayFactory: MapDisplayProducing {
         
         let interactor = MapInteractor(
             router: router,
-            presenter: presenter
+            presenter: presenter,
+            geocoder: GMSGeocoder()
         )
         
         viewController.interactor = interactor
         viewController.locationManager = CLLocationManager()
         viewController.feedbackGenerator = UIImpactFeedbackGenerator(style: .medium)
+        
+        let popupView = PopupView()
+        
+        viewController.popupView = popupView
+        viewController.popupViewAnimator = PopupViewAnimator(
+            hostView: viewController.view,
+            popupView: popupView,
+            popupViewHeight: 500,
+            popupPreviewHeight: 100,
+            initialState: .closed
+        )
         
         return viewController
     }

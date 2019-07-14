@@ -25,6 +25,7 @@
 		AC4708F022C0AF9600147E5C /* MapPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC4708E922C0AF9600147E5C /* MapPresenter.swift */; };
 		AC4708F122C0AF9600147E5C /* MapDisplayFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC4708EA22C0AF9600147E5C /* MapDisplayFactory.swift */; };
 		AC4708F322C1628C00147E5C /* MapStyle.geojson in Resources */ = {isa = PBXBuildFile; fileRef = AC4708F222C1628C00147E5C /* MapStyle.geojson */; };
+		AC54921822DB18BD003F866A /* Address.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC54921722DB18BD003F866A /* Address.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -48,6 +49,7 @@
 		AC4708E922C0AF9600147E5C /* MapPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapPresenter.swift; sourceTree = "<group>"; };
 		AC4708EA22C0AF9600147E5C /* MapDisplayFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapDisplayFactory.swift; sourceTree = "<group>"; };
 		AC4708F222C1628C00147E5C /* MapStyle.geojson */ = {isa = PBXFileReference; lastKnownFileType = text; path = MapStyle.geojson; sourceTree = "<group>"; };
+		AC54921722DB18BD003F866A /* Address.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Address.swift; sourceTree = "<group>"; };
 		AE2C9A74DD9E3BA62C08DFF7 /* Pods-virtual-tourist.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-virtual-tourist.release.xcconfig"; path = "Target Support Files/Pods-virtual-tourist/Pods-virtual-tourist.release.xcconfig"; sourceTree = "<group>"; };
 		CC840F13B824F53FBCC42A76 /* Pods-virtual-tourist.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-virtual-tourist.debug.xcconfig"; path = "Target Support Files/Pods-virtual-tourist/Pods-virtual-tourist.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -142,6 +144,7 @@
 				AC4708E822C0AF9600147E5C /* MapRouter.swift */,
 				AC4708E922C0AF9600147E5C /* MapPresenter.swift */,
 				AC4708EA22C0AF9600147E5C /* MapDisplayFactory.swift */,
+				AC54921722DB18BD003F866A /* Address.swift */,
 				AC4708F222C1628C00147E5C /* MapStyle.geojson */,
 			);
 			path = Map;
@@ -301,6 +304,7 @@
 			files = (
 				AC45934522D0D6700061EBD8 /* PopupState.swift in Sources */,
 				AC4708ED22C0AF9600147E5C /* MapRouterFactory.swift in Sources */,
+				AC54921822DB18BD003F866A /* Address.swift in Sources */,
 				AC4708F022C0AF9600147E5C /* MapPresenter.swift in Sources */,
 				AC45934722D0DACE0061EBD8 /* PopupView.swift in Sources */,
 				AC4708CF22C0AED400147E5C /* AppDelegate.swift in Sources */,

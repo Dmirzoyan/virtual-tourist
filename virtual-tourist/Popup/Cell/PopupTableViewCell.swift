@@ -3,7 +3,7 @@
 //  virtual-tourist
 //
 //  Created by Davit Mirzoyan on 7/7/19.
-//  Copyright © 2019 Udacity. All rights reserved.
+//  Copyright © 2019. All rights reserved.
 //
 
 import UIKit
