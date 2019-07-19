@@ -37,7 +37,7 @@ final class MapInteractor: MapInteracting {
         }
         FlickrApiClient().getImages(latitude: coordinate.latitude, longitude: coordinate.longitude) { (photos, error) in
             
-        }
+        }        
     }
     
     private func reverseGeocodeCoordinate(

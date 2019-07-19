@@ -10,6 +10,11 @@ import UIKit
 
 protocol PopupViewAnimating {
     func animateTransitionIfNeeded(to state: PopupState, duration: TimeInterval)
+    var updater: PopupViewStateUpdater? { get set }
+}
+
+protocol PopupViewStateUpdater {
+    func update(state: PopupState)
 }
 
 final class PopupViewAnimator: PopupViewAnimating {
@@ -27,6 +32,8 @@ final class PopupViewAnimator: PopupViewAnimating {
     
     private var bottomConstraint = NSLayoutConstraint()
     private lazy var panRecognizer = InstantPanGestureRecognizer(target: self, action: #selector(handlePan(recognizer:)))
+    
+    var updater: PopupViewStateUpdater?
     
     init(
         hostView: UIView,
@@ -53,8 +60,8 @@ final class PopupViewAnimator: PopupViewAnimating {
         bottomConstraint = popupView.bottomAnchor.constraint(equalTo: hostView.bottomAnchor, constant: popupViewHeight)
         
         NSLayoutConstraint.activate([
-            popupView.leadingAnchor.constraint(equalTo: hostView.leadingAnchor, constant: 5),
-            popupView.trailingAnchor.constraint(equalTo: hostView.trailingAnchor, constant: -5),
+            popupView.leadingAnchor.constraint(equalTo: hostView.leadingAnchor, constant: popupView.borderMargin),
+            popupView.trailingAnchor.constraint(equalTo: hostView.trailingAnchor, constant: -popupView.borderMargin),
             bottomConstraint,
             popupView.heightAnchor.constraint(equalToConstant: popupViewHeight),
         ])
@@ -95,6 +102,7 @@ final class PopupViewAnimator: PopupViewAnimating {
             case .closed:
                 strongSelf.bottomConstraint.constant = strongSelf.popupViewHeight
             }
+            strongSelf.updater?.update(state: strongSelf.currentState)
             
             strongSelf.isAnimationInProgress = false
         }

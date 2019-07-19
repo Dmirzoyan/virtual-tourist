@@ -10,10 +10,18 @@ import UIKit
 
 final class PopupView: UIView {
     
+    let borderMargin: CGFloat = 5
+    
     private var streetLabel: UILabel!
     private var cityLabel: UILabel!
     private var titleContainer: UIView!
-    private var tableView: UITableView!
+    private var collectionView: UICollectionView!
+    private var itemCount = 0
+    
+    private struct ViewMeasures {
+        static let interItemPadding: CGFloat = 5
+        static let nrItemsPerRow: CGFloat = 3
+    }
     
     private var streetTextAttributes: [NSAttributedString.Key: Any] {
         return [
@@ -25,6 +33,23 @@ final class PopupView: UIView {
         return [
             NSAttributedString.Key.font: UIFont(name: "Noteworthy-Light", size: 15)!
         ]
+    }
+    
+    private var layout: UICollectionViewLayout {
+        let layout = UICollectionViewFlowLayout()
+        let itemSize = ((UIScreen.main.bounds.width - 2 * borderMargin) - (ViewMeasures.nrItemsPerRow + 1)
+            * ViewMeasures.interItemPadding) / ViewMeasures.nrItemsPerRow
+        
+        layout.itemSize = CGSize(width: itemSize, height: itemSize)
+        layout.minimumInteritemSpacing = ViewMeasures.interItemPadding
+        layout.minimumLineSpacing = ViewMeasures.interItemPadding
+        layout.sectionInset = UIEdgeInsets(
+            top: ViewMeasures.interItemPadding,
+            left: ViewMeasures.interItemPadding,
+            bottom: ViewMeasures.interItemPadding,
+            right: ViewMeasures.interItemPadding
+        )
+        return layout
     }
     
     override init(frame: CGRect) {
@@ -43,12 +68,17 @@ final class PopupView: UIView {
         
         addShadow()
         layoutTitle()
-        setupTableView()
+        setupCollectionView()
     }
     
     func set(street: String, city: String) {
         streetLabel.attributedText = NSAttributedString(string: street, attributes: streetTextAttributes)
         cityLabel.attributedText = NSAttributedString(string: city, attributes: cityTextAttributes)
+    }
+    
+    func set(itemcCount: Int) {
+        self.itemCount = itemcCount
+        collectionView.reloadData()
     }
     
     private func addShadow() {
@@ -94,42 +124,42 @@ final class PopupView: UIView {
         return label
     }
     
-    private func setupTableView() {
-        tableView = UITableView()
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(tableView)
+    private func setupCollectionView() {
+        collectionView = UICollectionView(frame: frame, collectionViewLayout: layout)
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(collectionView)
         
         NSLayoutConstraint.activate([
-            tableView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            tableView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            tableView.bottomAnchor.constraint(equalTo: bottomAnchor),
-            tableView.topAnchor.constraint(equalTo: titleContainer.bottomAnchor)
+            collectionView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            collectionView.topAnchor.constraint(equalTo: titleContainer.bottomAnchor)
         ])
         
-        let nib = UINib.init(nibName: "PopupTableViewCell", bundle: nil)
+        let nib = UINib.init(nibName: "PopupCollectionViewCell", bundle: nil)
         
-        tableView.register(nib, forCellReuseIdentifier: "PopupTableViewCell")
-        tableView.delegate = self
-        tableView.dataSource = self
+        collectionView.register(nib, forCellWithReuseIdentifier: "PopupCollectionViewCell")
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        collectionView.backgroundColor = .white
+        collectionView.alwaysBounceVertical = true
     }
 }
 
-extension PopupView: UITableViewDelegate {
-    
-}
+extension PopupView: UICollectionViewDelegate {}
 
-extension PopupView: UITableViewDataSource {
+extension PopupView: UICollectionViewDataSource {
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 2
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return 10
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(
-            withIdentifier: "PopupTableViewCell", for: indexPath
-        ) as! PopupTableViewCell
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(
+            withReuseIdentifier: "PopupCollectionViewCell", for: indexPath
+        ) as! PopupCollectionViewCell
         
-        cell.locationImageView.image = nil
+        cell.imageView.image = nil
         
         return cell
     }

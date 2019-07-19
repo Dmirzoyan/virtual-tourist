@@ -8,12 +8,14 @@
 
 import UIKit
 
-final class PopupTableViewCell: UITableViewCell {
+final class PopupCollectionViewCell: UICollectionViewCell {
     
-    @IBOutlet weak var locationImageView: UIImageView!
+    @IBOutlet weak var imageView: UIImageView!
     
     override func awakeFromNib() {
         super.awakeFromNib()
+        
+        backgroundColor = .lightGray
     }
     
     override func layoutSubviews() {
