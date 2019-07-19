@@ -26,6 +26,10 @@
 		AC4708F122C0AF9600147E5C /* MapDisplayFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC4708EA22C0AF9600147E5C /* MapDisplayFactory.swift */; };
 		AC4708F322C1628C00147E5C /* MapStyle.geojson in Resources */ = {isa = PBXBuildFile; fileRef = AC4708F222C1628C00147E5C /* MapStyle.geojson */; };
 		AC54921822DB18BD003F866A /* Address.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC54921722DB18BD003F866A /* Address.swift */; };
+		AC54921B22DE51AD003F866A /* FlickrApiClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC54921A22DE51AD003F866A /* FlickrApiClient.swift */; };
+		AC54921F22DE5DFC003F866A /* FlickrPhoto.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC54921E22DE5DFC003F866A /* FlickrPhoto.swift */; };
+		AC54922522E1F10B003F866A /* SearchPhotosResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC54922422E1F10B003F866A /* SearchPhotosResponse.swift */; };
+		AC54922722E1F161003F866A /* SearchPhotosFailedResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC54922622E1F161003F866A /* SearchPhotosFailedResponse.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -50,6 +54,10 @@
 		AC4708EA22C0AF9600147E5C /* MapDisplayFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapDisplayFactory.swift; sourceTree = "<group>"; };
 		AC4708F222C1628C00147E5C /* MapStyle.geojson */ = {isa = PBXFileReference; lastKnownFileType = text; path = MapStyle.geojson; sourceTree = "<group>"; };
 		AC54921722DB18BD003F866A /* Address.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Address.swift; sourceTree = "<group>"; };
+		AC54921A22DE51AD003F866A /* FlickrApiClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickrApiClient.swift; sourceTree = "<group>"; };
+		AC54921E22DE5DFC003F866A /* FlickrPhoto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickrPhoto.swift; sourceTree = "<group>"; };
+		AC54922422E1F10B003F866A /* SearchPhotosResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchPhotosResponse.swift; sourceTree = "<group>"; };
+		AC54922622E1F161003F866A /* SearchPhotosFailedResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchPhotosFailedResponse.swift; sourceTree = "<group>"; };
 		AE2C9A74DD9E3BA62C08DFF7 /* Pods-virtual-tourist.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-virtual-tourist.release.xcconfig"; path = "Target Support Files/Pods-virtual-tourist/Pods-virtual-tourist.release.xcconfig"; sourceTree = "<group>"; };
 		CC840F13B824F53FBCC42A76 /* Pods-virtual-tourist.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-virtual-tourist.debug.xcconfig"; path = "Target Support Files/Pods-virtual-tourist/Pods-virtual-tourist.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -122,6 +130,7 @@
 		AC4708CD22C0AED400147E5C /* virtual-tourist */ = {
 			isa = PBXGroup;
 			children = (
+				AC54921922DE5180003F866A /* FlickrApi */,
 				AC45934A22D1D43E0061EBD8 /* Popup */,
 				AC45934222D0D6170061EBD8 /* Popup Animator */,
 				AC4708E322C0AF7000147E5C /* Map */,
@@ -148,6 +157,25 @@
 				AC4708F222C1628C00147E5C /* MapStyle.geojson */,
 			);
 			path = Map;
+			sourceTree = "<group>";
+		};
+		AC54921922DE5180003F866A /* FlickrApi */ = {
+			isa = PBXGroup;
+			children = (
+				AC54921D22DE51BF003F866A /* Responses */,
+				AC54921E22DE5DFC003F866A /* FlickrPhoto.swift */,
+				AC54921A22DE51AD003F866A /* FlickrApiClient.swift */,
+			);
+			path = FlickrApi;
+			sourceTree = "<group>";
+		};
+		AC54921D22DE51BF003F866A /* Responses */ = {
+			isa = PBXGroup;
+			children = (
+				AC54922422E1F10B003F866A /* SearchPhotosResponse.swift */,
+				AC54922622E1F161003F866A /* SearchPhotosFailedResponse.swift */,
+			);
+			path = Responses;
 			sourceTree = "<group>";
 		};
 		B17BC0678BC3256D666F14CB /* Pods */ = {
@@ -307,13 +335,17 @@
 				AC54921822DB18BD003F866A /* Address.swift in Sources */,
 				AC4708F022C0AF9600147E5C /* MapPresenter.swift in Sources */,
 				AC45934722D0DACE0061EBD8 /* PopupView.swift in Sources */,
+				AC54921F22DE5DFC003F866A /* FlickrPhoto.swift in Sources */,
 				AC4708CF22C0AED400147E5C /* AppDelegate.swift in Sources */,
+				AC54922522E1F10B003F866A /* SearchPhotosResponse.swift in Sources */,
 				AC4708EB22C0AF9600147E5C /* MapViewController.swift in Sources */,
 				AC45934F22D1D4EF0061EBD8 /* PopupTableViewCell.swift in Sources */,
 				AC4708EE22C0AF9600147E5C /* MapInteractor.swift in Sources */,
 				AC45934922D0DC5E0061EBD8 /* PopupViewAnimator.swift in Sources */,
 				AC4708D722C0AED400147E5C /* virtual_tourist.xcdatamodeld in Sources */,
 				AC4708F122C0AF9600147E5C /* MapDisplayFactory.swift in Sources */,
+				AC54921B22DE51AD003F866A /* FlickrApiClient.swift in Sources */,
+				AC54922722E1F161003F866A /* SearchPhotosFailedResponse.swift in Sources */,
 				AC4708EF22C0AF9600147E5C /* MapRouter.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
