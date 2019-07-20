@@ -10,6 +10,8 @@ import UIKit
 
 protocol MapDisplaying {
     func preview(_ address: Address)
+    func display(_ photos: [FlickrPhoto])
+    func displayAlert(with message: String)
 }
 
 final class MapPresenter: MapPresenting {
@@ -22,5 +24,13 @@ final class MapPresenter: MapPresenting {
     
     func preview(_ address: Address) {
         display?.preview(address)        
+    }
+    
+    func presentAlert(with message: String) {
+        display?.displayAlert(with: message)
+    }
+    
+    func present(_ photos: [FlickrPhoto]) {
+        display?.display(photos)
     }
 }

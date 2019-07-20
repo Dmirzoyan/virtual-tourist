@@ -10,6 +10,8 @@ import GoogleMaps
 
 protocol MapPresenting {
     func preview(_ address: Address)
+    func present(_ photos: [FlickrPhoto])
+    func presentAlert(with message: String)
 }
 
 final class MapInteractor: MapInteracting {
@@ -35,9 +37,21 @@ final class MapInteractor: MapInteracting {
 
             self?.presenter.preview(Address(city: city, street: street))
         }
-        FlickrApiClient().getImages(latitude: coordinate.latitude, longitude: coordinate.longitude) { (photos, error) in
+        
+        FlickrApiClient().getImages(
+            latitude: coordinate.latitude,
+            longitude: coordinate.longitude
+        ) { [weak self] photos, error in
+            guard
+                let photos = photos,
+                error == nil
+            else {
+                self?.presenter.presentAlert(with: "Could not retrieve images")
+                return
+            }
             
-        }        
+            self?.presenter.present(photos)
+        }
     }
     
     private func reverseGeocodeCoordinate(

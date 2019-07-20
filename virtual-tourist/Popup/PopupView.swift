@@ -10,17 +10,19 @@ import UIKit
 
 final class PopupView: UIView {
     
-    let borderMargin: CGFloat = 5
+    static let borderMargin: CGFloat = 5
     
     private var streetLabel: UILabel!
     private var cityLabel: UILabel!
     private var titleContainer: UIView!
     private var collectionView: UICollectionView!
-    private var itemCount = 0
+    private var items: [FlickrPhoto] = []
     
     private struct ViewMeasures {
-        static let interItemPadding: CGFloat = 5
+        static let interItemPadding: CGFloat = 15
         static let nrItemsPerRow: CGFloat = 3
+        static let itemWidth = ((UIScreen.main.bounds.width - 2 * borderMargin) -
+            (nrItemsPerRow + 1) * interItemPadding) / nrItemsPerRow
     }
     
     private var streetTextAttributes: [NSAttributedString.Key: Any] {
@@ -37,10 +39,8 @@ final class PopupView: UIView {
     
     private var layout: UICollectionViewLayout {
         let layout = UICollectionViewFlowLayout()
-        let itemSize = ((UIScreen.main.bounds.width - 2 * borderMargin) - (ViewMeasures.nrItemsPerRow + 1)
-            * ViewMeasures.interItemPadding) / ViewMeasures.nrItemsPerRow
         
-        layout.itemSize = CGSize(width: itemSize, height: itemSize)
+        layout.itemSize = CGSize(width: ViewMeasures.itemWidth, height: ViewMeasures.itemWidth * 1.6)
         layout.minimumInteritemSpacing = ViewMeasures.interItemPadding
         layout.minimumLineSpacing = ViewMeasures.interItemPadding
         layout.sectionInset = UIEdgeInsets(
@@ -76,8 +76,8 @@ final class PopupView: UIView {
         cityLabel.attributedText = NSAttributedString(string: city, attributes: cityTextAttributes)
     }
     
-    func set(itemcCount: Int) {
-        self.itemCount = itemcCount
+    func set(items: [FlickrPhoto]) {
+        self.items = items
         collectionView.reloadData()
     }
     
@@ -133,7 +133,7 @@ final class PopupView: UIView {
             collectionView.leadingAnchor.constraint(equalTo: leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: trailingAnchor),
             collectionView.bottomAnchor.constraint(equalTo: bottomAnchor),
-            collectionView.topAnchor.constraint(equalTo: titleContainer.bottomAnchor)
+            collectionView.topAnchor.constraint(equalTo: titleContainer.bottomAnchor, constant: 13)
         ])
         
         let nib = UINib.init(nibName: "PopupCollectionViewCell", bundle: nil)
@@ -142,7 +142,10 @@ final class PopupView: UIView {
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.backgroundColor = .white
-        collectionView.alwaysBounceVertical = true
+//        collectionView.bounces = true
+//        collectionView.isScrollEnabled = true
+//        collectionView.isUserInteractionEnabled = true
+//        collectionView.alwaysBounceVertical = true
     }
 }
 
@@ -151,7 +154,7 @@ extension PopupView: UICollectionViewDelegate {}
 extension PopupView: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 10
+        return items.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -159,7 +162,7 @@ extension PopupView: UICollectionViewDataSource {
             withReuseIdentifier: "PopupCollectionViewCell", for: indexPath
         ) as! PopupCollectionViewCell
         
-        cell.imageView.image = nil
+        cell.imageView.image = items[indexPath.item].thumbnail
         
         return cell
     }

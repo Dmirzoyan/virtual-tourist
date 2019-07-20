@@ -203,4 +203,14 @@ extension MapViewController: MapDisplaying {
             duration: Constants.animationDuration
         )
     }
+    
+    func displayAlert(with message: String) {
+        let alert = UIAlertController(title: message, message: nil, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Dismiss", style: .default, handler: nil))
+        present(alert, animated: true)
+    }
+    
+    func display(_ photos: [FlickrPhoto]) {
+        popupView.set(items: photos)
+    }
 }
