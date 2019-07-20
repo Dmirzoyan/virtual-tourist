@@ -11,6 +11,7 @@ import GoogleMaps
 
 protocol MapInteracting {
     func previewLocation(for coordinate: CLLocationCoordinate2D)
+    func loadImages(for coordinate: CLLocationCoordinate2D)
 }
 
 final class MapViewController: UIViewController {
@@ -20,6 +21,7 @@ final class MapViewController: UIViewController {
     var feedbackGenerator: UIImpactFeedbackGenerator!
     var popupView: PopupView!
     var popupViewAnimator: PopupViewAnimating!
+    var lastTappedCoordinate: CLLocationCoordinate2D?
     
     @IBOutlet weak var mapView: GMSMapView!
     
@@ -39,6 +41,8 @@ final class MapViewController: UIViewController {
         
         setupMapView()
         locationManager.requestWhenInUseAuthorization()
+        
+        popupView.delegate = self
     }
     
     private func setupMapView() {
@@ -108,6 +112,7 @@ extension MapViewController: GMSMapViewDelegate {
         feedbackGenerator.impactOccurred()
         addMarker(at: position)
         
+        lastTappedCoordinate = coordinate
         interactor.previewLocation(for: coordinate)
     }
     
@@ -212,5 +217,16 @@ extension MapViewController: MapDisplaying {
     
     func display(_ photos: [FlickrPhoto]) {
         popupView.set(items: photos)
+    }
+}
+
+extension MapViewController: PopupViewDelegate {
+    
+    func getNewImagesButtonPressed() {
+        guard let coordinate = lastTappedCoordinate
+        else { return }
+        
+        interactor.loadImages(for: coordinate)
+        
     }
 }

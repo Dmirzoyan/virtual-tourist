@@ -11,17 +11,19 @@ import UIKit
 final class FlickrPhoto {
     
     let id: String
+    let title: String
     var thumbnail: UIImage?
     
     private let farm: Int
     private let server: String
     private let secret: String
     
-    init(photoID: String, farm: Int, server: String, secret: String) {
+    init(photoID: String, farm: Int, server: String, secret: String, title: String) {
         self.id = photoID
         self.farm = farm
         self.server = server
         self.secret = secret
+        self.title = title
     }
     
     enum ImageSize: String {

@@ -11,7 +11,7 @@ import GoogleMaps
 protocol MapPresenting {
     func preview(_ address: Address)
     func present(_ photos: [FlickrPhoto])
-    func presentAlert(with message: String)
+    func presentAlert(with message: String)    
 }
 
 final class MapInteractor: MapInteracting {
@@ -37,7 +37,10 @@ final class MapInteractor: MapInteracting {
 
             self?.presenter.preview(Address(city: city, street: street))
         }
-        
+        loadImages(for: coordinate)
+    }
+    
+    func loadImages(for coordinate: CLLocationCoordinate2D) {
         FlickrApiClient().getImages(
             latitude: coordinate.latitude,
             longitude: coordinate.longitude
@@ -45,9 +48,9 @@ final class MapInteractor: MapInteracting {
             guard
                 let photos = photos,
                 error == nil
-            else {
-                self?.presenter.presentAlert(with: "Could not retrieve images")
-                return
+                else {
+                    self?.presenter.presentAlert(with: "Could not retrieve images")
+                    return
             }
             
             self?.presenter.present(photos)

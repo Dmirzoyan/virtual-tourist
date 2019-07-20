@@ -23,10 +23,10 @@
                         <rect key="frame" x="0.0" y="0.0" width="316" height="236"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="79b-jI-iXC">
-                                <rect key="frame" x="0.0" y="44" width="316" height="128"/>
+                                <rect key="frame" x="0.0" y="44" width="316" height="108"/>
                                 <subviews>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="miq-u0-uwn">
-                                        <rect key="frame" x="0.0" y="0.0" width="316" height="128"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="316" height="108"/>
                                     </imageView>
                                 </subviews>
                                 <constraints>
@@ -36,12 +36,21 @@
                                     <constraint firstAttribute="bottom" secondItem="miq-u0-uwn" secondAttribute="bottom" id="zZ4-ge-PuW"/>
                                 </constraints>
                             </view>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SWF-vJ-7cD">
+                                <rect key="frame" x="10" y="157" width="42" height="74"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
-                        <color key="backgroundColor" red="0.70838622968208975" green="0.70838622968208975" blue="0.70838622968208975" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="79b-jI-iXC" firstAttribute="top" secondItem="ne0-0F-mJj" secondAttribute="top" id="PXu-cb-G5g"/>
-                            <constraint firstItem="ne0-0F-mJj" firstAttribute="bottom" secondItem="79b-jI-iXC" secondAttribute="bottom" constant="30" id="Zko-Hl-Dfz"/>
+                            <constraint firstItem="SWF-vJ-7cD" firstAttribute="top" secondItem="79b-jI-iXC" secondAttribute="bottom" constant="5" id="U18-dU-hdV"/>
+                            <constraint firstAttribute="bottom" secondItem="SWF-vJ-7cD" secondAttribute="bottom" constant="5" id="XzA-2x-n4y"/>
+                            <constraint firstItem="ne0-0F-mJj" firstAttribute="bottom" secondItem="79b-jI-iXC" secondAttribute="bottom" constant="50" id="Zko-Hl-Dfz"/>
                             <constraint firstItem="79b-jI-iXC" firstAttribute="leading" secondItem="ne0-0F-mJj" secondAttribute="leading" id="mNt-Oh-4gc"/>
+                            <constraint firstItem="SWF-vJ-7cD" firstAttribute="leading" secondItem="ne0-0F-mJj" secondAttribute="leading" constant="10" id="pEK-yT-gG8"/>
                             <constraint firstItem="ne0-0F-mJj" firstAttribute="trailing" secondItem="79b-jI-iXC" secondAttribute="trailing" id="pEm-Ps-Aie"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="ne0-0F-mJj"/>
@@ -60,6 +69,7 @@
                 <outlet property="containerView" destination="b0P-Cl-IHc" id="OLd-Pe-7kb"/>
                 <outlet property="imageContainerView" destination="79b-jI-iXC" id="qRA-18-Jcg"/>
                 <outlet property="imageView" destination="miq-u0-uwn" id="V2S-Ew-xoG"/>
+                <outlet property="label" destination="SWF-vJ-7cD" id="V1Z-x5-e9a"/>
             </connections>
             <point key="canvasLocation" x="-211.59420289855075" y="79.6875"/>
         </collectionViewCell>

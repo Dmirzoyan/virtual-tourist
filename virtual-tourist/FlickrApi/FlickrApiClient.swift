@@ -26,7 +26,7 @@ final class FlickrApiClient: FlickrApiAccessing {
         var urlString: String {
             switch self {
             case .search(let latitude, let longitude):
-                return Endpoints.base + "?method=flickr.photos.search&api_key=\(apiKey)&per_page=20&format=json&lat=\(latitude)&lon=\(longitude)&radius=5"
+                return Endpoints.base + "?method=flickr.photos.search&api_key=\(apiKey)&per_page=20&format=json&lat=\(latitude)&lon=\(longitude)&radius=5&tags=architecture"
             }
         }
         
@@ -72,7 +72,8 @@ final class FlickrApiClient: FlickrApiAccessing {
                 photoID: photo.id,
                 farm: photo.farm,
                 server: photo.server,
-                secret: photo.secret
+                secret: photo.secret,
+                title: photo.title
             )
             
             if let url = flickrPhoto.imageUrl(),
@@ -89,14 +90,14 @@ final class FlickrApiClient: FlickrApiAccessing {
     }
     
     private func reportError(_ message: String, completion: @escaping SearchPhotosCompletion) {
-        let APIError = NSError(
+        let apiError = NSError(
             domain: "FlickrSearch",
             code: 0,
             userInfo: [NSLocalizedFailureReasonErrorKey: message]
         )
         
         OperationQueue.main.addOperation({
-            completion(nil, APIError)
+            completion(nil, apiError)
         })
     }
 }

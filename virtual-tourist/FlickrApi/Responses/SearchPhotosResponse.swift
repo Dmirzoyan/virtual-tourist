@@ -20,4 +20,5 @@ struct Photo: Codable {
     let secret: String
     let server: String
     let farm: Int
+    let title: String
 }

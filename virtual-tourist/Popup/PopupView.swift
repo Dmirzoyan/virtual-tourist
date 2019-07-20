@@ -8,6 +8,10 @@
 
 import UIKit
 
+protocol PopupViewDelegate {
+    func getNewImagesButtonPressed()
+}
+
 final class PopupView: UIView {
     
     static let borderMargin: CGFloat = 5
@@ -15,34 +19,28 @@ final class PopupView: UIView {
     private var streetLabel: UILabel!
     private var cityLabel: UILabel!
     private var titleContainer: UIView!
+    private var button: Button!
     private var collectionView: UICollectionView!
     private var items: [FlickrPhoto] = []
     
+    var delegate: PopupViewDelegate?
+    
     private struct ViewMeasures {
-        static let interItemPadding: CGFloat = 15
-        static let nrItemsPerRow: CGFloat = 3
+        static let buttonWidth: CGFloat = 200
+        static let buttonHeight: CGFloat = 50
+        static let interItemPadding: CGFloat = 25
+        static let nrItemsPerRow: CGFloat = 2
         static let itemWidth = ((UIScreen.main.bounds.width - 2 * borderMargin) -
             (nrItemsPerRow + 1) * interItemPadding) / nrItemsPerRow
-    }
-    
-    private var streetTextAttributes: [NSAttributedString.Key: Any] {
-        return [
-            NSAttributedString.Key.font: UIFont(name: "Noteworthy-Bold", size: 18)!
-        ]
-    }
-    
-    private var cityTextAttributes: [NSAttributedString.Key: Any] {
-        return [
-            NSAttributedString.Key.font: UIFont(name: "Noteworthy-Light", size: 15)!
-        ]
     }
     
     private var layout: UICollectionViewLayout {
         let layout = UICollectionViewFlowLayout()
         
-        layout.itemSize = CGSize(width: ViewMeasures.itemWidth, height: ViewMeasures.itemWidth * 1.6)
+        layout.itemSize = CGSize(width: floor(ViewMeasures.itemWidth), height: ViewMeasures.itemWidth * 1.6)
         layout.minimumInteritemSpacing = ViewMeasures.interItemPadding
         layout.minimumLineSpacing = ViewMeasures.interItemPadding
+        layout.scrollDirection = .horizontal
         layout.sectionInset = UIEdgeInsets(
             top: ViewMeasures.interItemPadding,
             left: ViewMeasures.interItemPadding,
@@ -63,22 +61,45 @@ final class PopupView: UIView {
     }
     
     private func commonInit() {
-        backgroundColor = .white
+        backgroundColor = UIColor.AppTheme.lightGray
         layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
         
         addShadow()
+        addContainer()
         layoutTitle()
+        layoutButton()
         setupCollectionView()
+        
+        button.setAttributedTitle(NSAttributedString(
+            string: "NEW IMAGES",
+            attributes: TextAttributes.mediumHeavy
+        ), for: .normal)
     }
     
     func set(street: String, city: String) {
-        streetLabel.attributedText = NSAttributedString(string: street, attributes: streetTextAttributes)
-        cityLabel.attributedText = NSAttributedString(string: city, attributes: cityTextAttributes)
+        streetLabel.attributedText = NSAttributedString(string: street, attributes: TextAttributes.largeHeavy)
+        cityLabel.attributedText = NSAttributedString(string: city, attributes: TextAttributes.mediumLight)
     }
     
     func set(items: [FlickrPhoto]) {
         self.items = items
         collectionView.reloadData()
+    }
+    
+    private func addContainer() {
+        let container = UIView()
+        container.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(container)
+        container.backgroundColor = UIColor.AppTheme.darkBlue
+        container.layer.maskedCorners = [ .layerMinXMinYCorner ]
+        container.layer.cornerRadius = 30
+        
+        NSLayoutConstraint.activate([
+            container.bottomAnchor.constraint(equalTo: bottomAnchor),
+            container.leadingAnchor.constraint(equalTo: leadingAnchor),
+            container.trailingAnchor.constraint(equalTo: trailingAnchor),
+            container.heightAnchor.constraint(equalToConstant: 300)
+        ])
     }
     
     private func addShadow() {
@@ -124,6 +145,26 @@ final class PopupView: UIView {
         return label
     }
     
+    private func layoutButton() {
+        button = Button()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.backgroundColor = UIColor.AppTheme.green
+        button.width = ViewMeasures.buttonWidth
+        button.height = ViewMeasures.buttonHeight
+        button.addTarget(self, action: #selector(buttonPressed(_:)), for: .touchDown)
+        addSubview(button)
+        
+        NSLayoutConstraint.activate([
+            button.centerXAnchor.constraint(equalTo: centerXAnchor),            
+            button.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -25)
+        ])
+    }
+    
+    @objc private func buttonPressed(_ sender: Button) {
+        delegate?.getNewImagesButtonPressed()
+        sender.pulsate()
+    }
+    
     private func setupCollectionView() {
         collectionView = UICollectionView(frame: frame, collectionViewLayout: layout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
@@ -132,7 +173,7 @@ final class PopupView: UIView {
         NSLayoutConstraint.activate([
             collectionView.leadingAnchor.constraint(equalTo: leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: button.topAnchor, constant: -10),
             collectionView.topAnchor.constraint(equalTo: titleContainer.bottomAnchor, constant: 13)
         ])
         
@@ -141,7 +182,7 @@ final class PopupView: UIView {
         collectionView.register(nib, forCellWithReuseIdentifier: "PopupCollectionViewCell")
         collectionView.delegate = self
         collectionView.dataSource = self
-        collectionView.backgroundColor = .white
+        collectionView.backgroundColor = .clear
 //        collectionView.bounces = true
 //        collectionView.isScrollEnabled = true
 //        collectionView.isUserInteractionEnabled = true
@@ -163,6 +204,11 @@ extension PopupView: UICollectionViewDataSource {
         ) as! PopupCollectionViewCell
         
         cell.imageView.image = items[indexPath.item].thumbnail
+        cell.label.attributedText = NSAttributedString(
+            string: items[indexPath.item].title,
+            attributes: TextAttributes.small
+        )
+        cell.label.widthAnchor.constraint(equalToConstant: ViewMeasures.itemWidth * 0.7).isActive = true
         
         return cell
     }
