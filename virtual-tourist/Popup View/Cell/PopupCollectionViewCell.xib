@@ -37,7 +37,7 @@
                                 </constraints>
                             </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SWF-vJ-7cD">
-                                <rect key="frame" x="10" y="157" width="42" height="74"/>
+                                <rect key="frame" x="10" y="157" width="296" height="74"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -45,6 +45,7 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
+                            <constraint firstItem="ne0-0F-mJj" firstAttribute="trailing" secondItem="SWF-vJ-7cD" secondAttribute="trailing" constant="10" id="P9U-zI-494"/>
                             <constraint firstItem="79b-jI-iXC" firstAttribute="top" secondItem="ne0-0F-mJj" secondAttribute="top" id="PXu-cb-G5g"/>
                             <constraint firstItem="SWF-vJ-7cD" firstAttribute="top" secondItem="79b-jI-iXC" secondAttribute="bottom" constant="5" id="U18-dU-hdV"/>
                             <constraint firstAttribute="bottom" secondItem="SWF-vJ-7cD" secondAttribute="bottom" constant="5" id="XzA-2x-n4y"/>

@@ -113,6 +113,7 @@ extension MapViewController: GMSMapViewDelegate {
         addMarker(at: position)
         
         lastTappedCoordinate = coordinate
+        
         interactor.previewLocation(for: coordinate)
     }
     
@@ -215,8 +216,8 @@ extension MapViewController: MapDisplaying {
         present(alert, animated: true)
     }
     
-    func display(_ photos: [FlickrPhoto]) {
-        popupView.set(items: photos)
+    func display(_ viewState: PopupViewState) {
+        popupView.set(viewState: viewState)
     }
 }
 

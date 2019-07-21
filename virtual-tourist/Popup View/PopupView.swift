@@ -21,7 +21,7 @@ final class PopupView: UIView {
     private var titleContainer: UIView!
     private var button: Button!
     private var collectionView: UICollectionView!
-    private var items: [FlickrPhoto] = []
+    private let dataSource = PopupViewDataSource()
     
     var delegate: PopupViewDelegate?
     
@@ -61,19 +61,14 @@ final class PopupView: UIView {
     }
     
     private func commonInit() {
-        backgroundColor = UIColor.AppTheme.lightGray
+        backgroundColor = UIColor.AppTheme.creamyGray
         layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
         
         addShadow()
         addContainer()
         layoutTitle()
-        layoutButton()
+        setupButton()
         setupCollectionView()
-        
-        button.setAttributedTitle(NSAttributedString(
-            string: "NEW IMAGES",
-            attributes: TextAttributes.mediumHeavy
-        ), for: .normal)
     }
     
     func set(street: String, city: String) {
@@ -81,8 +76,8 @@ final class PopupView: UIView {
         cityLabel.attributedText = NSAttributedString(string: city, attributes: TextAttributes.mediumLight)
     }
     
-    func set(items: [FlickrPhoto]) {
-        self.items = items
+    func set(viewState: PopupViewState) {
+        dataSource.set(viewState)
         collectionView.reloadData()
     }
     
@@ -145,7 +140,7 @@ final class PopupView: UIView {
         return label
     }
     
-    private func layoutButton() {
+    private func setupButton() {
         button = Button()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.backgroundColor = UIColor.AppTheme.green
@@ -158,6 +153,11 @@ final class PopupView: UIView {
             button.centerXAnchor.constraint(equalTo: centerXAnchor),            
             button.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -25)
         ])
+        
+        button.setAttributedTitle(NSAttributedString(
+            string: "NEW IMAGES",
+            attributes: TextAttributes.mediumHeavy
+        ), for: .normal)
     }
     
     @objc private func buttonPressed(_ sender: Button) {
@@ -178,38 +178,15 @@ final class PopupView: UIView {
         ])
         
         let nib = UINib.init(nibName: "PopupCollectionViewCell", bundle: nil)
-        
         collectionView.register(nib, forCellWithReuseIdentifier: "PopupCollectionViewCell")
+        
+        let nib2 = UINib.init(nibName: "PopupProgressCollectionViewCell", bundle: nil)
+        collectionView.register(nib2, forCellWithReuseIdentifier: "PopupProgressCollectionViewCell")
+        
         collectionView.delegate = self
-        collectionView.dataSource = self
+        collectionView.dataSource = dataSource
         collectionView.backgroundColor = .clear
-//        collectionView.bounces = true
-//        collectionView.isScrollEnabled = true
-//        collectionView.isUserInteractionEnabled = true
-//        collectionView.alwaysBounceVertical = true
     }
 }
 
 extension PopupView: UICollectionViewDelegate {}
-
-extension PopupView: UICollectionViewDataSource {
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return items.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(
-            withReuseIdentifier: "PopupCollectionViewCell", for: indexPath
-        ) as! PopupCollectionViewCell
-        
-        cell.imageView.image = items[indexPath.item].thumbnail
-        cell.label.attributedText = NSAttributedString(
-            string: items[indexPath.item].title,
-            attributes: TextAttributes.small
-        )
-        cell.label.widthAnchor.constraint(equalToConstant: ViewMeasures.itemWidth * 0.7).isActive = true
-        
-        return cell
-    }
-}

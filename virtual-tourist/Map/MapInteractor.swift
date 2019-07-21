@@ -11,7 +11,8 @@ import GoogleMaps
 protocol MapPresenting {
     func preview(_ address: Address)
     func present(_ photos: [FlickrPhoto])
-    func presentAlert(with message: String)    
+    func presentAlert(with message: String)
+    func presentLoadingProgress()
 }
 
 final class MapInteractor: MapInteracting {
@@ -52,9 +53,10 @@ final class MapInteractor: MapInteracting {
                     self?.presenter.presentAlert(with: "Could not retrieve images")
                     return
             }
-            
             self?.presenter.present(photos)
         }
+        
+        presenter.presentLoadingProgress()
     }
     
     private func reverseGeocodeCoordinate(

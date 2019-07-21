@@ -11,6 +11,10 @@
 		AC40FAAD22E36866003A2691 /* Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC40FAAC22E36866003A2691 /* Button.swift */; };
 		AC40FAB022E38490003A2691 /* AppTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC40FAAF22E38490003A2691 /* AppTheme.swift */; };
 		AC40FAB222E38515003A2691 /* TextAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC40FAB122E38515003A2691 /* TextAttributes.swift */; };
+		AC40FAB522E4E91F003A2691 /* PopupViewState.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC40FAB422E4E91F003A2691 /* PopupViewState.swift */; };
+		AC40FAB722E4EE10003A2691 /* PopupProgressCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC40FAB622E4EE10003A2691 /* PopupProgressCollectionViewCell.swift */; };
+		AC40FAB922E4EE1F003A2691 /* PopupProgressCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = AC40FAB822E4EE1F003A2691 /* PopupProgressCollectionViewCell.xib */; };
+		AC40FABC22E4F31F003A2691 /* PopupViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC40FABB22E4F31F003A2691 /* PopupViewDataSource.swift */; };
 		AC45934522D0D6700061EBD8 /* PopupState.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC45934422D0D6700061EBD8 /* PopupState.swift */; };
 		AC45934722D0DACE0061EBD8 /* PopupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC45934622D0DACE0061EBD8 /* PopupView.swift */; };
 		AC45934922D0DC5E0061EBD8 /* PopupViewAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC45934822D0DC5E0061EBD8 /* PopupViewAnimator.swift */; };
@@ -40,6 +44,10 @@
 		AC40FAAC22E36866003A2691 /* Button.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Button.swift; sourceTree = "<group>"; };
 		AC40FAAF22E38490003A2691 /* AppTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTheme.swift; sourceTree = "<group>"; };
 		AC40FAB122E38515003A2691 /* TextAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextAttributes.swift; sourceTree = "<group>"; };
+		AC40FAB422E4E91F003A2691 /* PopupViewState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopupViewState.swift; sourceTree = "<group>"; };
+		AC40FAB622E4EE10003A2691 /* PopupProgressCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopupProgressCollectionViewCell.swift; sourceTree = "<group>"; };
+		AC40FAB822E4EE1F003A2691 /* PopupProgressCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PopupProgressCollectionViewCell.xib; sourceTree = "<group>"; };
+		AC40FABB22E4F31F003A2691 /* PopupViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopupViewDataSource.swift; sourceTree = "<group>"; };
 		AC45934422D0D6700061EBD8 /* PopupState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopupState.swift; sourceTree = "<group>"; };
 		AC45934622D0DACE0061EBD8 /* PopupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopupView.swift; sourceTree = "<group>"; };
 		AC45934822D0DC5E0061EBD8 /* PopupViewAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopupViewAnimator.swift; sourceTree = "<group>"; };
@@ -97,6 +105,22 @@
 			path = Theme;
 			sourceTree = "<group>";
 		};
+		AC40FAB322E4E90D003A2691 /* View State */ = {
+			isa = PBXGroup;
+			children = (
+				AC40FAB422E4E91F003A2691 /* PopupViewState.swift */,
+			);
+			path = "View State";
+			sourceTree = "<group>";
+		};
+		AC40FABA22E4F2CF003A2691 /* Data Source */ = {
+			isa = PBXGroup;
+			children = (
+				AC40FABB22E4F31F003A2691 /* PopupViewDataSource.swift */,
+			);
+			path = "Data Source";
+			sourceTree = "<group>";
+		};
 		AC45934222D0D6170061EBD8 /* Popup Animator */ = {
 			isa = PBXGroup;
 			children = (
@@ -114,13 +138,15 @@
 			path = State;
 			sourceTree = "<group>";
 		};
-		AC45934A22D1D43E0061EBD8 /* Popup */ = {
+		AC45934A22D1D43E0061EBD8 /* Popup View */ = {
 			isa = PBXGroup;
 			children = (
+				AC40FABA22E4F2CF003A2691 /* Data Source */,
+				AC40FAB322E4E90D003A2691 /* View State */,
 				AC45934B22D1D4B50061EBD8 /* Cell */,
 				AC45934622D0DACE0061EBD8 /* PopupView.swift */,
 			);
-			path = Popup;
+			path = "Popup View";
 			sourceTree = "<group>";
 		};
 		AC45934B22D1D4B50061EBD8 /* Cell */ = {
@@ -128,6 +154,8 @@
 			children = (
 				AC45934C22D1D4DF0061EBD8 /* PopupCollectionViewCell.xib */,
 				AC45934E22D1D4EF0061EBD8 /* PopupCollectionViewCell.swift */,
+				AC40FAB822E4EE1F003A2691 /* PopupProgressCollectionViewCell.xib */,
+				AC40FAB622E4EE10003A2691 /* PopupProgressCollectionViewCell.swift */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -156,7 +184,7 @@
 				AC40FAAE22E3847B003A2691 /* Theme */,
 				AC40FAAB22E36856003A2691 /* Components */,
 				AC54921922DE5180003F866A /* FlickrApi */,
-				AC45934A22D1D43E0061EBD8 /* Popup */,
+				AC45934A22D1D43E0061EBD8 /* Popup View */,
 				AC45934222D0D6170061EBD8 /* Popup Animator */,
 				AC4708E322C0AF7000147E5C /* Map */,
 				AC4708CE22C0AED400147E5C /* AppDelegate.swift */,
@@ -281,6 +309,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AC40FAB922E4EE1F003A2691 /* PopupProgressCollectionViewCell.xib in Resources */,
 				AC4708DC22C0AED900147E5C /* LaunchScreen.storyboard in Resources */,
 				AC4708EC22C0AF9600147E5C /* MapViewController.xib in Resources */,
 				AC4708F322C1628C00147E5C /* MapStyle.geojson in Resources */,
@@ -358,12 +387,14 @@
 				AC45934522D0D6700061EBD8 /* PopupState.swift in Sources */,
 				AC4708ED22C0AF9600147E5C /* MapRouterFactory.swift in Sources */,
 				AC40FAB022E38490003A2691 /* AppTheme.swift in Sources */,
+				AC40FAB522E4E91F003A2691 /* PopupViewState.swift in Sources */,
 				AC54921822DB18BD003F866A /* Address.swift in Sources */,
 				AC4708F022C0AF9600147E5C /* MapPresenter.swift in Sources */,
 				AC45934722D0DACE0061EBD8 /* PopupView.swift in Sources */,
 				AC54921F22DE5DFC003F866A /* FlickrPhoto.swift in Sources */,
 				AC4708CF22C0AED400147E5C /* AppDelegate.swift in Sources */,
 				AC40FAAD22E36866003A2691 /* Button.swift in Sources */,
+				AC40FAB722E4EE10003A2691 /* PopupProgressCollectionViewCell.swift in Sources */,
 				AC54922522E1F10B003F866A /* SearchPhotosResponse.swift in Sources */,
 				AC4708EB22C0AF9600147E5C /* MapViewController.swift in Sources */,
 				AC40FAB222E38515003A2691 /* TextAttributes.swift in Sources */,
@@ -372,6 +403,7 @@
 				AC45934922D0DC5E0061EBD8 /* PopupViewAnimator.swift in Sources */,
 				AC4708D722C0AED400147E5C /* virtual_tourist.xcdatamodeld in Sources */,
 				AC4708F122C0AF9600147E5C /* MapDisplayFactory.swift in Sources */,
+				AC40FABC22E4F31F003A2691 /* PopupViewDataSource.swift in Sources */,
 				AC54921B22DE51AD003F866A /* FlickrApiClient.swift in Sources */,
 				AC54922722E1F161003F866A /* SearchPhotosFailedResponse.swift in Sources */,
 				AC4708EF22C0AF9600147E5C /* MapRouter.swift in Sources */,

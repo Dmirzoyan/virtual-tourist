@@ -10,7 +10,7 @@ import UIKit
 
 protocol MapDisplaying {
     func preview(_ address: Address)
-    func display(_ photos: [FlickrPhoto])
+    func display(_ viewState: PopupViewState)
     func displayAlert(with message: String)
 }
 
@@ -31,6 +31,14 @@ final class MapPresenter: MapPresenting {
     }
     
     func present(_ photos: [FlickrPhoto]) {
-        display?.display(photos)
+        let viewState = PopupViewState(isLoading: false, items: photos.map {
+            return PopupItemViewState(thumbnail: $0.thumbnail, title: $0.title)
+        })
+        
+        display?.display(viewState)
+    }
+    
+    func presentLoadingProgress() {
+        display?.display(PopupViewState(isLoading: true, items: []))
     }
 }

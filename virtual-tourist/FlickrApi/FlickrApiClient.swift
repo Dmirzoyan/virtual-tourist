@@ -21,12 +21,12 @@ final class FlickrApiClient: FlickrApiAccessing {
     enum Endpoints {
         static let base = "https://api.flickr.com/services/rest/"
         
-        case search(String, String)
+        case search(String, String, Int)
         
         var urlString: String {
             switch self {
-            case .search(let latitude, let longitude):
-                return Endpoints.base + "?method=flickr.photos.search&api_key=\(apiKey)&per_page=20&format=json&lat=\(latitude)&lon=\(longitude)&radius=5&tags=architecture"
+            case .search(let latitude, let longitude, let page):
+                return Endpoints.base + "?method=flickr.photos.search&api_key=\(apiKey)&per_page=15&format=json&lat=\(latitude)&lon=\(longitude)&radius=10&tags=architecture&page=\(page)"
             }
         }
         
@@ -38,7 +38,7 @@ final class FlickrApiClient: FlickrApiAccessing {
     func getImages(latitude: Double, longitude: Double, completion: @escaping SearchPhotosCompletion) {
         let latitudeStr = String(format:"%f", latitude)
         let longitudeStr = String(format:"%f", longitude)
-        let request = URLRequest(url: Endpoints.search(latitudeStr, longitudeStr).url)
+        let request = URLRequest(url: Endpoints.search(latitudeStr, longitudeStr, Int.random(in: 1 ..< 7)).url)
         
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
             guard
