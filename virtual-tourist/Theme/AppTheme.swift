@@ -26,5 +26,9 @@ extension UIColor {
         static var lightGray: UIColor {
             return UIColor(red: 236 / 256, green: 240 / 256, blue: 241 / 256, alpha: 1)
         }
+        
+        static var midGray: UIColor {
+            return UIColor(red: 160 / 256, green: 164 / 256, blue: 166 / 256, alpha: 1)
+        }
     }
 }

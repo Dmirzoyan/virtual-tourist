@@ -20,21 +20,21 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rko-f6-0O6">
-                        <rect key="frame" x="15" y="15" width="246" height="126"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <rect key="frame" x="15" y="15" width="246" height="116"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="bCE-Ak-ETe"/>
                     </view>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="IOA-zA-1eA">
                         <rect key="frame" x="15" y="158" width="246" height="16"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </view>
                 </subviews>
             </view>
             <constraints>
                 <constraint firstItem="rko-f6-0O6" firstAttribute="leading" secondItem="f8g-zq-sjz" secondAttribute="leading" constant="15" id="07Q-SS-uGo"/>
                 <constraint firstAttribute="bottom" secondItem="IOA-zA-1eA" secondAttribute="bottom" constant="17" id="7oX-L9-GKY"/>
-                <constraint firstItem="IOA-zA-1eA" firstAttribute="top" secondItem="rko-f6-0O6" secondAttribute="bottom" constant="17" id="8DR-cz-aCt"/>
-                <constraint firstAttribute="bottom" secondItem="rko-f6-0O6" secondAttribute="bottom" constant="50" id="DBj-Jo-MXO"/>
+                <constraint firstItem="IOA-zA-1eA" firstAttribute="top" secondItem="rko-f6-0O6" secondAttribute="bottom" constant="27" id="8DR-cz-aCt"/>
+                <constraint firstAttribute="bottom" secondItem="rko-f6-0O6" secondAttribute="bottom" constant="60" id="DBj-Jo-MXO"/>
                 <constraint firstAttribute="trailing" secondItem="rko-f6-0O6" secondAttribute="trailing" constant="15" id="R5S-gB-iEt"/>
                 <constraint firstItem="IOA-zA-1eA" firstAttribute="leading" secondItem="f8g-zq-sjz" secondAttribute="leading" constant="15" id="dwE-wh-CGa"/>
                 <constraint firstAttribute="trailing" secondItem="IOA-zA-1eA" secondAttribute="trailing" constant="15" id="kTJ-Zb-sg4"/>
