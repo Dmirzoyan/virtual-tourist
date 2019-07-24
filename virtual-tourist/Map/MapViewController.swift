@@ -10,8 +10,8 @@ import UIKit
 import GoogleMaps
 
 protocol MapInteracting {
-    func previewLocation(for coordinate: CLLocationCoordinate2D)
-    func loadImages(for coordinate: CLLocationCoordinate2D)
+    func viewLocation(with coordinate: CLLocationCoordinate2D)
+    func loadNewImages()
 }
 
 final class MapViewController: UIViewController {
@@ -20,8 +20,7 @@ final class MapViewController: UIViewController {
     var locationManager: CLLocationManager!
     var feedbackGenerator: UIImpactFeedbackGenerator!
     var popupView: PopupView!
-    var popupViewAnimator: PopupViewAnimating!
-    var lastTappedCoordinate: CLLocationCoordinate2D?
+    var popupViewAnimator: PopupViewAnimating!    
     
     @IBOutlet weak var mapView: GMSMapView!
     
@@ -40,8 +39,7 @@ final class MapViewController: UIViewController {
         super.viewDidLoad()
         
         setupMapView()
-        locationManager.requestWhenInUseAuthorization()
-        
+        locationManager.requestWhenInUseAuthorization()        
         popupView.delegate = self
     }
     
@@ -94,7 +92,9 @@ extension MapViewController: GMSMapViewDelegate {
     
     func mapView(_ mapView: GMSMapView, didTap marker: GMSMarker) -> Bool {
 //        strongSelf.popupView.set(street: street, city: city)
-        popupViewAnimator.animateTransitionIfNeeded(to: PopupState.preview, duration: Constants.animationDuration)
+        if popupViewAnimator.currentState == PopupState.closed {
+            popupViewAnimator.animateTransitionIfNeeded(to: PopupState.preview, duration: Constants.animationDuration)
+        }
         
         select(marker)
         
@@ -112,9 +112,7 @@ extension MapViewController: GMSMapViewDelegate {
         feedbackGenerator.impactOccurred()
         addMarker(at: position)
         
-        lastTappedCoordinate = coordinate
-        
-        interactor.previewLocation(for: coordinate)
+        interactor.viewLocation(with: coordinate)
     }
     
     func mapView(_ mapView: GMSMapView, didChange position: GMSCameraPosition) {
@@ -201,13 +199,15 @@ extension MapViewController {
 
 extension MapViewController: MapDisplaying {
     
-    func preview(_ address: Address) {
-        popupView.set(street: address.street, city: address.city)
+    func display(_ viewState: PopupViewState) {
+        if viewState.changes.address == .changed && popupViewAnimator.currentState == PopupState.closed {
+            popupViewAnimator.animateTransitionIfNeeded(
+                to: PopupState.preview,
+                duration: Constants.animationDuration
+            )
+        }
         
-        popupViewAnimator.animateTransitionIfNeeded(
-            to: PopupState.preview,
-            duration: Constants.animationDuration
-        )
+        popupView.set(viewState: viewState)
     }
     
     func displayAlert(with message: String) {
@@ -215,19 +215,11 @@ extension MapViewController: MapDisplaying {
         alert.addAction(UIAlertAction(title: "Dismiss", style: .default, handler: nil))
         present(alert, animated: true)
     }
-    
-    func display(_ viewState: PopupViewState) {
-        popupView.set(viewState: viewState)
-    }
 }
 
 extension MapViewController: PopupViewDelegate {
     
     func getNewImagesButtonPressed() {
-        guard let coordinate = lastTappedCoordinate
-        else { return }
-        
-        interactor.loadImages(for: coordinate)
-        
+        interactor.loadNewImages()
     }
 }

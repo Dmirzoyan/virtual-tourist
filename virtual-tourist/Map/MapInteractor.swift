@@ -20,6 +20,7 @@ final class MapInteractor: MapInteracting {
     private let router: MapInternalRoute
     private let presenter: MapPresenting
     private let geocoder: GMSGeocoder
+    private var currentCoordinate: CLLocationCoordinate2D?
     
     init(
         router: MapInternalRoute,
@@ -31,7 +32,7 @@ final class MapInteractor: MapInteracting {
         self.geocoder = geocoder
     }
     
-    func previewLocation(for coordinate: CLLocationCoordinate2D) {
+    func viewLocation(with coordinate: CLLocationCoordinate2D) {
         reverseGeocodeCoordinate(coordinate) { [weak self] success, street, city in
             guard success == true
             else { return }
@@ -39,9 +40,17 @@ final class MapInteractor: MapInteracting {
             self?.presenter.preview(Address(city: city, street: street))
         }
         loadImages(for: coordinate)
+        currentCoordinate = coordinate
     }
     
-    func loadImages(for coordinate: CLLocationCoordinate2D) {
+    func loadNewImages() {
+        guard let coordinate = currentCoordinate
+        else { return }
+        
+        loadImages(for: coordinate)
+    }
+    
+    private func loadImages(for coordinate: CLLocationCoordinate2D) {
         FlickrApiClient().getImages(
             latitude: coordinate.latitude,
             longitude: coordinate.longitude
@@ -49,9 +58,9 @@ final class MapInteractor: MapInteracting {
             guard
                 let photos = photos,
                 error == nil
-                else {
-                    self?.presenter.presentAlert(with: "Could not retrieve images")
-                    return
+            else {
+                self?.presenter.presentAlert(with: "Could not retrieve images")
+                return
             }
             self?.presenter.present(photos)
         }
@@ -69,9 +78,9 @@ final class MapInteractor: MapInteracting {
                 let street = address.thoroughfare,
                 let city = address.locality,
                 let country = address.country
-                else {
-                    completion(false, "", "")
-                    return
+            else {
+                completion(false, "", "")
+                return
             }
             
             completion(true, street, "\(city), \(country)");

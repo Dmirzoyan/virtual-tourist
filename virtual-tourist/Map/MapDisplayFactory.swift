@@ -14,6 +14,8 @@ protocol MapDisplayProducing {
 }
 
 final class MapDisplayFactory: MapDisplayProducing {
+    let popupViewHeight: CGFloat = 500
+    let popupPreviewHeight: CGFloat = 100
     
     func make(router: MapInternalRoute) -> UIViewController {
         let viewController = MapViewController()
@@ -32,14 +34,34 @@ final class MapDisplayFactory: MapDisplayProducing {
         let popupView = PopupView()
         
         viewController.popupView = popupView
+        layout(popupView, on: viewController.view)
+        
+        let bottomConstraint = popupView.bottomAnchor.constraint(
+            equalTo: viewController.view.bottomAnchor,
+            constant: popupViewHeight
+        )
+        bottomConstraint.isActive = true
+        
         viewController.popupViewAnimator = PopupViewAnimator(
             hostView: viewController.view,
             popupView: popupView,
-            popupViewHeight: 500,
-            popupPreviewHeight: 100,
-            initialState: .closed
+            popupViewHeight: popupViewHeight,
+            popupPreviewHeight: popupPreviewHeight,
+            initialState: .closed,
+            bottomConstraint: bottomConstraint
         )
         
         return viewController
+    }
+    
+    private func layout(_ popupView: UIView, on hostView: UIView) {
+        popupView.translatesAutoresizingMaskIntoConstraints = false
+        hostView.addSubview(popupView)
+        
+        NSLayoutConstraint.activate([
+            popupView.leadingAnchor.constraint(equalTo: hostView.leadingAnchor, constant: PopupView.borderMargin),
+            popupView.trailingAnchor.constraint(equalTo: hostView.trailingAnchor, constant: -PopupView.borderMargin),
+            popupView.heightAnchor.constraint(equalToConstant: popupViewHeight),
+        ])
     }
 }

@@ -8,10 +8,15 @@
 
 import UIKit
 
+protocol ButtonDelegate {
+    func isPressed()
+}
+
 final class Button: UIButton {
     
     var width: CGFloat!
     var height: CGFloat!
+    var delegate: ButtonDelegate?
     
     override func layoutSubviews() {
         super.layoutSubviews()
@@ -24,6 +29,10 @@ final class Button: UIButton {
         ])
         
         addShadow()
+        
+        addTarget(self, action: #selector(buttonPressed(_:)), for: .touchDown)
+        addTarget(self, action: #selector(buttonReleased(_:)), for: .touchUpInside)
+        addTarget(self, action: #selector(buttonReleased(_:)), for: .touchCancel)
     }
     
     private func addShadow() {
@@ -35,16 +44,26 @@ final class Button: UIButton {
         layer.masksToBounds = false
     }
     
-    func pulsate() {
+    @objc private func buttonPressed(_ sender: Button) {
+        sender.shrink()
+    }
+    
+    @objc private func buttonReleased(_ sender: Button) {
+        sender.expand()
+        delegate?.isPressed()
+    }
+    
+    private func shrink() {
         let animator = UIViewPropertyAnimator(duration: 0.1, curve: .easeOut, animations: {
             self.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)
         })
-        animator.addCompletion { position in
-            let animator = UIViewPropertyAnimator(duration: 0.1, curve: .easeOut, animations: {
-                self.transform = CGAffineTransform.identity
-            })
-            animator.startAnimation()
-        }
+        animator.startAnimation()
+    }
+    
+    private func expand() {
+        let animator = UIViewPropertyAnimator(duration: 0.1, curve: .easeOut, animations: {
+            self.transform = CGAffineTransform.identity
+        })
         animator.startAnimation()
     }
 }

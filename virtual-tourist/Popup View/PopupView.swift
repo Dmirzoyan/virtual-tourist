@@ -71,13 +71,16 @@ final class PopupView: UIView {
         setupCollectionView()
     }
     
-    func set(street: String, city: String) {
-        streetLabel.attributedText = NSAttributedString(string: street, attributes: TextAttributes.largeHeavy)
-        cityLabel.attributedText = NSAttributedString(string: city, attributes: TextAttributes.mediumLight)
-    }
-    
     func set(viewState: PopupViewState) {
         dataSource.set(viewState)
+        streetLabel.attributedText = NSAttributedString(
+            string: viewState.address.street,
+            attributes: TextAttributes.largeHeavy
+        )
+        cityLabel.attributedText = NSAttributedString(
+            string: viewState.address.city,
+            attributes: TextAttributes.mediumLight
+        )
         collectionView.reloadData()
     }
     
@@ -145,8 +148,7 @@ final class PopupView: UIView {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.backgroundColor = UIColor.AppTheme.green
         button.width = ViewMeasures.buttonWidth
-        button.height = ViewMeasures.buttonHeight
-        button.addTarget(self, action: #selector(buttonPressed(_:)), for: .touchDown)
+        button.height = ViewMeasures.buttonHeight        
         addSubview(button)
         
         NSLayoutConstraint.activate([
@@ -158,11 +160,8 @@ final class PopupView: UIView {
             string: "NEW IMAGES",
             attributes: TextAttributes.mediumHeavy
         ), for: .normal)
-    }
-    
-    @objc private func buttonPressed(_ sender: Button) {
-        delegate?.getNewImagesButtonPressed()
-        sender.pulsate()
+        
+        button.delegate = self
     }
     
     private func setupCollectionView() {
@@ -190,3 +189,9 @@ final class PopupView: UIView {
 }
 
 extension PopupView: UICollectionViewDelegate {}
+
+extension PopupView: ButtonDelegate {
+    func isPressed() {
+        delegate?.getNewImagesButtonPressed()
+    }
+}

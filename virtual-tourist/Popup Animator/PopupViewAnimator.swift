@@ -10,6 +10,7 @@ import UIKit
 
 protocol PopupViewAnimating {
     func animateTransitionIfNeeded(to state: PopupState, duration: TimeInterval)
+    var currentState: PopupState { get }
     var updater: PopupViewStateUpdater? { get set }
 }
 
@@ -23,14 +24,14 @@ final class PopupViewAnimator: PopupViewAnimating {
     private let popupView: PopupView
     private let popupViewHeight: CGFloat
     private let popupPreviewHeight: CGFloat
-    private var currentState: PopupState
+    var currentState: PopupState
     
     private var animator = UIViewPropertyAnimator()
     private var isAnimationInProgress = false
     private var animationProgress: CGFloat = 0
     private var viewCornerRadius: CGFloat = 30
     
-    private var bottomConstraint = NSLayoutConstraint()
+    private var bottomConstraint: NSLayoutConstraint
     private lazy var panRecognizer = InstantPanGestureRecognizer(target: self, action: #selector(handlePan(recognizer:)))
     
     var updater: PopupViewStateUpdater?
@@ -40,31 +41,17 @@ final class PopupViewAnimator: PopupViewAnimating {
         popupView: PopupView,
         popupViewHeight: CGFloat,
         popupPreviewHeight: CGFloat,
-        initialState: PopupState
+        initialState: PopupState,
+        bottomConstraint: NSLayoutConstraint
     ) {
         self.hostView = hostView
         self.popupView = popupView
         self.popupViewHeight = popupViewHeight
         self.popupPreviewHeight = popupPreviewHeight
         self.currentState = initialState
-        
-        layout()
+        self.bottomConstraint = bottomConstraint
         
         popupView.addGestureRecognizer(panRecognizer)
-    }
-    
-    private func layout() {
-        popupView.translatesAutoresizingMaskIntoConstraints = false
-        hostView.addSubview(popupView)
-        
-        bottomConstraint = popupView.bottomAnchor.constraint(equalTo: hostView.bottomAnchor, constant: popupViewHeight)
-        
-        NSLayoutConstraint.activate([
-            popupView.leadingAnchor.constraint(equalTo: hostView.leadingAnchor, constant: PopupView.borderMargin),
-            popupView.trailingAnchor.constraint(equalTo: hostView.trailingAnchor, constant: -PopupView.borderMargin),
-            bottomConstraint,
-            popupView.heightAnchor.constraint(equalToConstant: popupViewHeight),
-        ])
     }
     
     func animateTransitionIfNeeded(to state: PopupState, duration: TimeInterval) {

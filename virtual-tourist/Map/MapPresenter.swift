@@ -9,7 +9,6 @@
 import UIKit
 
 protocol MapDisplaying {
-    func preview(_ address: Address)
     func display(_ viewState: PopupViewState)
     func displayAlert(with message: String)
 }
@@ -17,13 +16,16 @@ protocol MapDisplaying {
 final class MapPresenter: MapPresenting {
     
     private var display: MapDisplaying?
+    private var viewState = PopupViewState.default
     
     init(display: MapDisplaying) {
         self.display = display
     }
     
     func preview(_ address: Address) {
-        display?.preview(address)        
+        viewState.set(address: address)
+        viewState.changes = PopupViewStateChanges(address: .changed)
+        display?.display(viewState)
     }
     
     func presentAlert(with message: String) {
@@ -31,14 +33,20 @@ final class MapPresenter: MapPresenting {
     }
     
     func present(_ photos: [FlickrPhoto]) {
-        let viewState = PopupViewState(isLoading: false, items: photos.map {
+        viewState.set(isLoading: false)
+        viewState.set(items: photos.map {
             return PopupItemViewState(thumbnail: $0.thumbnail, title: $0.title)
         })
+        viewState.changes = PopupViewStateChanges(isLoading: .changed, items: .changed)
         
         display?.display(viewState)
     }
     
     func presentLoadingProgress() {
-        display?.display(PopupViewState(isLoading: true, items: []))
+        viewState.set(isLoading: true)
+        viewState.set(items: [])
+        viewState.changes = PopupViewStateChanges(isLoading: .changed, items: .changed)
+        
+        display?.display(viewState)
     }
 }
