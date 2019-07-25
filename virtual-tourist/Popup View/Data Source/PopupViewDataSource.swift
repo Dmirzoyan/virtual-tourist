@@ -9,7 +9,9 @@
 import UIKit
 
 protocol PopupViewDataProviding {
+    func getItems() -> [PopupItemViewState]
     func set(_ viewState: PopupViewState)
+    func deleteItem(at indexPath: IndexPath)
 }
 
 final class PopupViewDataSource: NSObject, UICollectionViewDataSource {
@@ -64,8 +66,16 @@ final class PopupViewDataSource: NSObject, UICollectionViewDataSource {
 
 extension PopupViewDataSource: PopupViewDataProviding {
     
+    func getItems() -> [PopupItemViewState] {
+        return viewState?.items ?? []
+    }
+    
     func set(_ viewState: PopupViewState) {
         self.viewState = viewState
+    }
+    
+    func deleteItem(at indexPath: IndexPath) {
+        viewState?.items.remove(at: indexPath.row)
     }
 }
 

@@ -22,13 +22,15 @@ final class PopupView: UIView {
     private var button: Button!
     private var collectionView: UICollectionView!
     private let dataSource = PopupViewDataSource()
+    private var feedbackGenerator = UIImpactFeedbackGenerator()
+    private var cellEngaged = false
     
     var delegate: PopupViewDelegate?
     
     private struct ViewMeasures {
         static let buttonWidth: CGFloat = 200
         static let buttonHeight: CGFloat = 50
-        static let interItemPadding: CGFloat = 25
+        static let interItemPadding: CGFloat = 12
         static let nrItemsPerRow: CGFloat = 2
         static let itemWidth = ((UIScreen.main.bounds.width - 2 * borderMargin) -
             (nrItemsPerRow + 1) * interItemPadding) / nrItemsPerRow
@@ -156,12 +158,15 @@ final class PopupView: UIView {
             button.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -25)
         ])
         
+        setButton(title: "NEW IMAGES")
+        button.delegate = self
+    }
+    
+    private func setButton(title: String) {
         button.setAttributedTitle(NSAttributedString(
-            string: "NEW IMAGES",
+            string: title,
             attributes: TextAttributes.mediumHeavy
         ), for: .normal)
-        
-        button.delegate = self
     }
     
     private func setupCollectionView() {
@@ -185,6 +190,43 @@ final class PopupView: UIView {
         collectionView.delegate = self
         collectionView.dataSource = dataSource
         collectionView.backgroundColor = .clear
+        
+        setupCollectionViewGestureRecognizer()
+    }
+    
+    private func setupCollectionViewGestureRecognizer() {
+        let gestureRecognizer = UILongPressGestureRecognizer(
+            target: self,
+            action: #selector(handleLongPress(recognizer:))
+        )
+        
+        gestureRecognizer.minimumPressDuration = 0.5
+        gestureRecognizer.delaysTouchesBegan = true
+        self.collectionView.addGestureRecognizer(gestureRecognizer)
+    }
+    
+    @objc private func handleLongPress(recognizer: UILongPressGestureRecognizer) {
+        let location = recognizer.location(in: self.collectionView)
+        
+        guard
+            cellEngaged == false,
+            let indexPath = self.collectionView.indexPathForItem(at: location),
+            let cell = self.collectionView.cellForItem(at: indexPath) as? PopupCollectionViewCell
+        else { return }
+        
+        feedbackGenerator.impactOccurred()
+        
+        cell.prepareToDelete { [weak self] type in
+            if type == .delete {
+                self?.dataSource.deleteItem(at: indexPath)
+                self?.collectionView.deleteItems(at: [indexPath])
+            }
+
+            self?.cellEngaged = false
+            self?.setButton(title: "NEW IMAGES")
+        }
+        cellEngaged = true
+        setButton(title: "DONE")
     }
 }
 
@@ -192,6 +234,16 @@ extension PopupView: UICollectionViewDelegate {}
 
 extension PopupView: ButtonDelegate {
     func isPressed() {
-        delegate?.getNewImagesButtonPressed()
+        
+        if button.titleLabel?.text == "DONE" {
+            for i in 0 ... dataSource.getItems().count {
+                let cell = self.collectionView.cellForItem(at: IndexPath(item: i, section: 0)) as? PopupCollectionViewCell
+                cell?.cancelDeletion()
+            }
+            cellEngaged = false
+            setButton(title: "NEW IMAGES")
+        } else {
+            delegate?.getNewImagesButtonPressed()
+        }
     }
 }

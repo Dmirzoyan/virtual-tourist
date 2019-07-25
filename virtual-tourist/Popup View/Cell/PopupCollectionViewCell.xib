@@ -20,13 +20,13 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="b0P-Cl-IHc">
-                        <rect key="frame" x="0.0" y="0.0" width="316" height="236"/>
+                        <rect key="frame" x="10" y="10" width="296" height="216"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="79b-jI-iXC">
-                                <rect key="frame" x="0.0" y="44" width="316" height="108"/>
+                                <rect key="frame" x="0.0" y="34" width="296" height="108"/>
                                 <subviews>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="miq-u0-uwn">
-                                        <rect key="frame" x="0.0" y="0.0" width="316" height="108"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="296" height="108"/>
                                     </imageView>
                                 </subviews>
                                 <constraints>
@@ -37,7 +37,7 @@
                                 </constraints>
                             </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SWF-vJ-7cD">
-                                <rect key="frame" x="10" y="157" width="296" height="74"/>
+                                <rect key="frame" x="10" y="147" width="276" height="64"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -56,23 +56,46 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="ne0-0F-mJj"/>
                     </view>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uNw-d4-ha3">
+                        <rect key="frame" x="10" y="10" width="296" height="216"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <viewLayoutGuide key="safeArea" id="Mfn-By-w9n"/>
+                    </view>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ay0-mm-SK2">
+                        <rect key="frame" x="286" y="0.0" width="30" height="30"/>
+                        <state key="normal" image="close"/>
+                        <connections>
+                            <action selector="buttonPressed:" destination="CrR-Md-VXU" eventType="touchUpInside" id="JXM-Ae-3st"/>
+                        </connections>
+                    </button>
                 </subviews>
             </view>
             <constraints>
-                <constraint firstItem="b0P-Cl-IHc" firstAttribute="leading" secondItem="CrR-Md-VXU" secondAttribute="leading" id="9nf-8L-vJx"/>
-                <constraint firstItem="b0P-Cl-IHc" firstAttribute="top" secondItem="CrR-Md-VXU" secondAttribute="top" id="NT9-xf-yxs"/>
-                <constraint firstAttribute="bottom" secondItem="b0P-Cl-IHc" secondAttribute="bottom" id="SRu-a7-d7b"/>
-                <constraint firstAttribute="trailing" secondItem="b0P-Cl-IHc" secondAttribute="trailing" id="oIP-A8-hk4"/>
+                <constraint firstItem="b0P-Cl-IHc" firstAttribute="leading" secondItem="CrR-Md-VXU" secondAttribute="leading" constant="10" id="9nf-8L-vJx"/>
+                <constraint firstItem="Ay0-mm-SK2" firstAttribute="top" secondItem="CrR-Md-VXU" secondAttribute="top" id="DrG-pv-cws"/>
+                <constraint firstItem="b0P-Cl-IHc" firstAttribute="top" secondItem="CrR-Md-VXU" secondAttribute="top" constant="10" id="NT9-xf-yxs"/>
+                <constraint firstAttribute="bottom" secondItem="b0P-Cl-IHc" secondAttribute="bottom" constant="10" id="SRu-a7-d7b"/>
+                <constraint firstAttribute="trailing" secondItem="uNw-d4-ha3" secondAttribute="trailing" constant="10" id="SWd-f0-l06"/>
+                <constraint firstAttribute="bottom" secondItem="uNw-d4-ha3" secondAttribute="bottom" constant="10" id="SYh-GQ-LCn"/>
+                <constraint firstItem="uNw-d4-ha3" firstAttribute="top" secondItem="CrR-Md-VXU" secondAttribute="top" constant="10" id="jxm-0U-A9f"/>
+                <constraint firstAttribute="trailing" secondItem="Ay0-mm-SK2" secondAttribute="trailing" id="kJs-T8-aiQ"/>
+                <constraint firstAttribute="trailing" secondItem="b0P-Cl-IHc" secondAttribute="trailing" constant="10" id="oIP-A8-hk4"/>
+                <constraint firstItem="uNw-d4-ha3" firstAttribute="leading" secondItem="CrR-Md-VXU" secondAttribute="leading" constant="10" id="tZn-ob-oG3"/>
             </constraints>
             <viewLayoutGuide key="safeArea" id="8Wf-VF-ssy"/>
             <size key="customSize" width="316" height="236"/>
             <connections>
                 <outlet property="containerView" destination="b0P-Cl-IHc" id="OLd-Pe-7kb"/>
+                <outlet property="deleteButton" destination="Ay0-mm-SK2" id="n5W-OG-YsY"/>
                 <outlet property="imageContainerView" destination="79b-jI-iXC" id="qRA-18-Jcg"/>
                 <outlet property="imageView" destination="miq-u0-uwn" id="V2S-Ew-xoG"/>
                 <outlet property="label" destination="SWF-vJ-7cD" id="V1Z-x5-e9a"/>
+                <outlet property="overlayView" destination="uNw-d4-ha3" id="DOP-0L-ycY"/>
             </connections>
             <point key="canvasLocation" x="-211.59420289855075" y="79.6875"/>
         </collectionViewCell>
     </objects>
+    <resources>
+        <image name="close" width="30" height="30"/>
+    </resources>
 </document>

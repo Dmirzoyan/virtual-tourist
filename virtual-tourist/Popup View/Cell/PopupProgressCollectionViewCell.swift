@@ -12,6 +12,7 @@ final class PopupProgressCollectionViewCell: UICollectionViewCell {
     
     @IBOutlet weak var imageContainerView: UIView!
     @IBOutlet weak var labelContainerView: UIView!
+    @IBOutlet weak var containerView: UIView!
     
     private let imageContainerGradient = CAGradientLayer()
     private let labelContainerGradient = CAGradientLayer()
@@ -20,7 +21,9 @@ final class PopupProgressCollectionViewCell: UICollectionViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        backgroundColor = .white
+        containerView.backgroundColor = .white
+        containerView.layer.cornerRadius = 15
+        
         setupGradientAnimation()
         setupGradients()
     }

@@ -13,7 +13,7 @@ enum Change { case changed, unchanged }
 struct PopupViewState {
     private(set) var isLoading: Bool
     private(set) var address: Address
-    private(set) var items: [PopupItemViewState]
+    var items: [PopupItemViewState]
     
     var changes: PopupViewStateChanges
     
