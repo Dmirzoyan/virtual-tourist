@@ -51,6 +51,8 @@ final class MapDisplayFactory: MapDisplayProducing {
             bottomConstraint: bottomConstraint
         )
         
+        viewController.popupPreviewHeight = popupPreviewHeight
+        
         return viewController
     }
     

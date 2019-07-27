@@ -20,7 +20,8 @@ final class MapViewController: UIViewController {
     var locationManager: CLLocationManager!
     var feedbackGenerator: UIImpactFeedbackGenerator!
     var popupView: PopupView!
-    var popupViewAnimator: PopupViewAnimating!    
+    var popupViewAnimator: PopupViewAnimating!
+    var popupPreviewHeight: CGFloat!
     
     @IBOutlet weak var mapView: GMSMapView!
     
@@ -98,6 +99,8 @@ extension MapViewController: GMSMapViewDelegate {
                 isInteractionEnabled: false,
                 duration: Constants.animationDuration
             )
+            
+            animateMapPadding(height: popupPreviewHeight)
         }
         
         select(marker)
@@ -111,6 +114,7 @@ extension MapViewController: GMSMapViewDelegate {
             isInteractionEnabled: false,
             duration: Constants.animationDuration
         )
+        animateMapPadding(height: 0)
         updateMarkers()
     }
     
@@ -148,11 +152,18 @@ extension MapViewController: GMSMapViewDelegate {
         return opacity
     }
     
-    private func springAnimate(_ marker: GMSMarker) {
+    private func animateMarker(_ marker: GMSMarker) {
         let velocity = CGVector(dx: 1.0, dy: 1.0)
         let timing = UISpringTimingParameters(dampingRatio: 0.3, initialVelocity: velocity)
         let animator = UIViewPropertyAnimator(duration: 0.6, timingParameters: timing)
         animator.addAnimations { marker.iconView?.transform = CGAffineTransform(scaleX: 1.5, y: 1.5) }
+        animator.startAnimation()
+    }
+    
+    private func animateMapPadding(height: CGFloat) {
+        let animator = UIViewPropertyAnimator.init(duration: Constants.animationDuration, dampingRatio: 1) {
+            self.mapView.padding = UIEdgeInsets(top: 0, left: 0, bottom: height, right: 0)
+        }
         animator.startAnimation()
     }
 }
@@ -173,7 +184,7 @@ extension MapViewController {
         marker.iconView = UIImageView(image: markerIcon)
         marker.map = mapView
         
-        springAnimate(marker)
+        animateMarker(marker)
         mapMarkers.append(marker)
     }
     
@@ -214,6 +225,7 @@ extension MapViewController: MapDisplaying {
                 isInteractionEnabled: false,
                 duration: Constants.animationDuration
             )
+            animateMapPadding(height: popupPreviewHeight)
         }
         
         popupView.set(viewState: viewState)
