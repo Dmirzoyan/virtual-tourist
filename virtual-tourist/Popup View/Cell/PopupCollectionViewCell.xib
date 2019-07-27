@@ -61,7 +61,7 @@
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="Mfn-By-w9n"/>
                     </view>
-                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ay0-mm-SK2">
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ay0-mm-SK2" customClass="Button" customModule="virtual_tourist" customModuleProvider="target">
                         <rect key="frame" x="286" y="0.0" width="30" height="30"/>
                         <state key="normal" image="close"/>
                         <connections>
@@ -86,7 +86,7 @@
             <size key="customSize" width="316" height="236"/>
             <connections>
                 <outlet property="containerView" destination="b0P-Cl-IHc" id="OLd-Pe-7kb"/>
-                <outlet property="deleteButton" destination="Ay0-mm-SK2" id="n5W-OG-YsY"/>
+                <outlet property="deleteButton" destination="Ay0-mm-SK2" id="2z2-uw-0rn"/>
                 <outlet property="imageContainerView" destination="79b-jI-iXC" id="qRA-18-Jcg"/>
                 <outlet property="imageView" destination="miq-u0-uwn" id="V2S-Ew-xoG"/>
                 <outlet property="label" destination="SWF-vJ-7cD" id="V1Z-x5-e9a"/>

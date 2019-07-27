@@ -17,7 +17,7 @@ final class PopupCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var imageContainerView: UIView!
     @IBOutlet weak var label: UILabel!
     @IBOutlet weak var overlayView: UIView!
-    @IBOutlet weak var deleteButton: UIButton!
+    @IBOutlet weak var deleteButton: Button!
     
     private var deleteCompletion: ((DeleteCompletionType) -> Void)?
     
@@ -27,16 +27,16 @@ final class PopupCollectionViewCell: UICollectionViewCell {
         setStyle()
     }
     
-    @IBAction func buttonPressed(_ sender: Any) {
-        deleteCompletion?(.delete)
-    }
-    
     override func layoutSubviews() {
         super.layoutSubviews()
         
         deleteCompletion?(.cancel)
-        deleteButton.isHidden = true
+        deleteButton.shrinkAnimate(duration: 0.01, alpha: 0, scaleX: 0.2, scaleY: 0.2)
         overlayView.backgroundColor = UIColor.clear
+    }
+    
+    @IBAction func buttonPressed(_ sender: Any) {
+        deleteCompletion?(.delete)
     }
     
     private func setStyle() {
@@ -50,7 +50,7 @@ final class PopupCollectionViewCell: UICollectionViewCell {
         containerView.layer.masksToBounds = true
         addShadow(on: self.layer, height: 5, opacity: 0.2, radius: 4)
         
-        deleteButton.backgroundColor = UIColor.lightGray
+        deleteButton.backgroundColor = UIColor.white.withAlphaComponent(0.85)
         deleteButton.layer.cornerRadius = 16
     }
     
@@ -69,28 +69,45 @@ final class PopupCollectionViewCell: UICollectionViewCell {
     }
     
     func prepareToDelete(completion: @escaping (DeleteCompletionType) -> Void) {
-        let shakeAnimation = CABasicAnimation(keyPath: "transform.rotation")
-        let startAngle: Float = (-2) * 3.14159/270
-        let stopAngle = -startAngle
-        
-        shakeAnimation.duration = 0.12
-        shakeAnimation.repeatCount = 99999
-        shakeAnimation.fromValue = NSNumber(value: startAngle as Float)
-        shakeAnimation.toValue = NSNumber(value: stopAngle as Float)
-        shakeAnimation.autoreverses = true
-        shakeAnimation.timeOffset = 290 * drand48()
-        
-        layer.add(shakeAnimation, forKey:"animate")
-        
-        deleteButton.isHidden = false
-        overlayView.backgroundColor = UIColor.init(white: 0.4, alpha: 0.5)
-        
+        animateForDeletion()
         deleteCompletion = completion
+    }
+    
+    private func animateForDeletion() {
+        shakeAnimateCell()
+        animateOverlay(toAdd: true)
+        deleteButton.expandAnimate(duration: 0.3, alpha: 1)
     }
     
     func cancelDeletion() {
         layer.removeAnimation(forKey: "animate")
-        deleteButton.isHidden = true
-        overlayView.backgroundColor = UIColor.clear
+        animateOverlay(toAdd: false)
+        deleteButton.shrinkAnimate(duration: 0.3, alpha: 0, scaleX: 0.2, scaleY: 0.2)
+    }
+    
+    private func shakeAnimateCell() {
+        let animation = CABasicAnimation(keyPath: "transform.rotation")
+        let startAngle: Float = (-2) * 3.14159/270
+        let stopAngle = -startAngle
+        
+        animation.duration = 0.12
+        animation.repeatCount = 99999
+        animation.fromValue = NSNumber(value: startAngle as Float)
+        animation.toValue = NSNumber(value: stopAngle as Float)
+        animation.autoreverses = true
+        animation.timeOffset = 290 * drand48()
+        
+        layer.add(animation, forKey:"animate")
+    }
+    
+    private func animateOverlay(toAdd: Bool) {
+        let animator = UIViewPropertyAnimator(duration: 1, dampingRatio: 1) {
+            if toAdd {
+                self.overlayView.backgroundColor = UIColor.red.withAlphaComponent(0.3)
+            } else {
+                self.overlayView.backgroundColor = UIColor.clear
+            }
+        }
+        animator.startAnimation()
     }
 }

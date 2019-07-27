@@ -19,7 +19,7 @@ final class PopupView: UIView {
     private var streetLabel: UILabel!
     private var cityLabel: UILabel!
     private var titleContainer: UIView!
-    private var button: Button!
+    private var button: DecoratedButton!
     private var collectionView: UICollectionView!
     private let dataSource = PopupViewDataSource()
     private var feedbackGenerator = UIImpactFeedbackGenerator()
@@ -146,7 +146,7 @@ final class PopupView: UIView {
     }
     
     private func setupButton() {
-        button = Button()
+        button = DecoratedButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.backgroundColor = UIColor.AppTheme.green
         button.width = ViewMeasures.buttonWidth
