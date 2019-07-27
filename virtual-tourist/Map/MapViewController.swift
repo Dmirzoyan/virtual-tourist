@@ -208,7 +208,7 @@ extension MapViewController {
 extension MapViewController: MapDisplaying {
     
     func display(_ viewState: PopupViewState) {
-        if viewState.changes.address == .changed && popupViewAnimator.currentState == PopupState.closed {
+        if viewState.changes.address.isChanged && popupViewAnimator.currentState == PopupState.closed {
             popupViewAnimator.animateTransitionIfNeeded(
                 to: PopupState.preview,
                 isInteractionEnabled: false,

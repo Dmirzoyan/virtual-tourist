@@ -23,8 +23,10 @@ final class MapPresenter: MapPresenting {
     }
     
     func preview(_ address: Address) {
-        viewState.set(address: address)
-        viewState.changes = PopupViewStateChanges(address: .changed)
+        viewState.set {
+            $0.set(address: address)
+        }
+        
         display?.display(viewState)
     }
     
@@ -33,19 +35,21 @@ final class MapPresenter: MapPresenting {
     }
     
     func present(_ photos: [FlickrPhoto]) {
-        viewState.set(isLoading: false)
-        viewState.set(items: photos.map {
-            return PopupItemViewState(thumbnail: $0.thumbnail, title: $0.title)
-        })
-        viewState.changes = PopupViewStateChanges(isLoading: .changed, items: .changed)
+        viewState.set {
+            $0.set(isLoading: false)
+            $0.items = photos.map {
+                return PopupItemViewState(thumbnail: $0.thumbnail, title: $0.title)
+            }
+        }
         
         display?.display(viewState)
     }
     
     func presentLoadingProgress() {
-        viewState.set(isLoading: true)
-        viewState.set(items: [])
-        viewState.changes = PopupViewStateChanges(isLoading: .changed, items: .changed)
+        viewState.set {
+            $0.set(isLoading: true)
+            $0.set(items: [])
+        }
         
         display?.display(viewState)
     }

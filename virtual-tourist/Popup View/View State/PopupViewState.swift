@@ -8,8 +8,6 @@
 
 import UIKit
 
-enum Change { case changed, unchanged }
-
 struct PopupViewState {
     private(set) var isLoading: Bool
     private(set) var address: Address
@@ -24,16 +22,24 @@ struct PopupViewState {
         changes: PopupViewStateChanges()
     )
     
+    mutating func set(_ updates: (inout PopupViewState) -> Void) {        
+        changes = PopupViewStateChanges()
+        updates(&self)
+    }
+    
     mutating func set(isLoading: Bool) {
         self.isLoading = isLoading
+        self.changes.isLoading = .changed
     }
     
     mutating func set(address: Address) {
         self.address = address
+        self.changes.address = .changed
     }
     
     mutating func set(items: [PopupItemViewState]) {
         self.items = items
+        self.changes.items = .changed
     }
 }
 
@@ -42,10 +48,23 @@ struct PopupItemViewState {
     let title: String
 }
 
+enum Change { case changed, unchanged }
+
+extension Change {
+    var isChanged: Bool {
+        switch self {
+        case .changed:
+            return true
+        case .unchanged:
+            return false
+        }
+    }
+}
+
 struct PopupViewStateChanges {
-    let isLoading: Change
-    let address: Change
-    let items: Change
+    var isLoading: Change
+    var address: Change
+    var items: Change
     
     init(
         isLoading: Change = .unchanged,
