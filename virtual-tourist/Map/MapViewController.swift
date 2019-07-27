@@ -93,7 +93,11 @@ extension MapViewController: GMSMapViewDelegate {
     func mapView(_ mapView: GMSMapView, didTap marker: GMSMarker) -> Bool {
 //        strongSelf.popupView.set(street: street, city: city)
         if popupViewAnimator.currentState == PopupState.closed {
-            popupViewAnimator.animateTransitionIfNeeded(to: PopupState.preview, duration: Constants.animationDuration)
+            popupViewAnimator.animateTransitionIfNeeded(
+                to: PopupState.preview,
+                isInteractionEnabled: false,
+                duration: Constants.animationDuration
+            )
         }
         
         select(marker)
@@ -102,7 +106,11 @@ extension MapViewController: GMSMapViewDelegate {
     }
     
     func mapView(_ mapView: GMSMapView, didTapAt coordinate: CLLocationCoordinate2D) {
-        popupViewAnimator.animateTransitionIfNeeded(to: PopupState.closed, duration: Constants.animationDuration)
+        popupViewAnimator.animateTransitionIfNeeded(
+            to: PopupState.closed,
+            isInteractionEnabled: false,
+            duration: Constants.animationDuration
+        )
         updateMarkers()
     }
     
@@ -203,6 +211,7 @@ extension MapViewController: MapDisplaying {
         if viewState.changes.address == .changed && popupViewAnimator.currentState == PopupState.closed {
             popupViewAnimator.animateTransitionIfNeeded(
                 to: PopupState.preview,
+                isInteractionEnabled: false,
                 duration: Constants.animationDuration
             )
         }

@@ -9,7 +9,7 @@
 import UIKit
 
 protocol PopupViewAnimating {
-    func animateTransitionIfNeeded(to state: PopupState, duration: TimeInterval)
+    func animateTransitionIfNeeded(to state: PopupState, isInteractionEnabled: Bool, duration: TimeInterval)
     var currentState: PopupState { get }
     var updater: PopupViewStateUpdater? { get set }
 }
@@ -28,6 +28,7 @@ final class PopupViewAnimator: PopupViewAnimating {
     
     private var animator = UIViewPropertyAnimator()
     private var isAnimationInProgress = false
+    private var isAnimationInteractionEnabled = true
     private var animationProgress: CGFloat = 0
     private var viewCornerRadius: CGFloat = 30
     
@@ -54,7 +55,7 @@ final class PopupViewAnimator: PopupViewAnimating {
         popupView.addGestureRecognizer(panRecognizer)
     }
     
-    func animateTransitionIfNeeded(to state: PopupState, duration: TimeInterval) {
+    func animateTransitionIfNeeded(to state: PopupState, isInteractionEnabled: Bool, duration: TimeInterval) {
         guard !isAnimationInProgress
         else { return }
         
@@ -92,18 +93,23 @@ final class PopupViewAnimator: PopupViewAnimating {
             strongSelf.updater?.update(state: strongSelf.currentState)
             
             strongSelf.isAnimationInProgress = false
+            strongSelf.isAnimationInteractionEnabled = true
         }
         
         animator.startAnimation()
         isAnimationInProgress = true
+        isAnimationInteractionEnabled = isInteractionEnabled
     }
     
     @objc
     private func handlePan(recognizer: InstantPanGestureRecognizer) {
+        guard isAnimationInteractionEnabled
+        else { return }
+        
         animate(recognizer: recognizer, duration: 0.8)
     }
     
-    private func animate(recognizer: InstantPanGestureRecognizer, duration: TimeInterval) {
+    func animate(recognizer: InstantPanGestureRecognizer, duration: TimeInterval) {
         switch recognizer.state {
         case .began:
             startInteractiveTransition(duration: duration)
@@ -117,7 +123,7 @@ final class PopupViewAnimator: PopupViewAnimating {
     }
     
     private func startInteractiveTransition(duration: TimeInterval) {
-        animateTransitionIfNeeded(to: currentState.next, duration: duration)
+        animateTransitionIfNeeded(to: currentState.next, isInteractionEnabled: true, duration: duration)
         animator.pauseAnimation()
         animationProgress = animator.fractionComplete
     }
@@ -150,6 +156,8 @@ final class PopupViewAnimator: PopupViewAnimating {
             ((currentState.next == .closed) && !isClosing) ||
             ((currentState.next == .preview) && !isClosing)) {
             animator.isReversed = true
+        } else {
+            animator.isReversed = false
         }
         
         animator.continueAnimation(withTimingParameters: nil, durationFactor: 0)
