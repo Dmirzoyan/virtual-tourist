@@ -9,15 +9,16 @@
 import UIKit
 import GoogleMaps
 
-let googleApiKey = "YOUR_GOOGLE_MAPS_API_KEY_HERE"
+let googleApiKey = "Google Maps API Key"
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
-
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        
+        Dependencies.dataController.load()
         
         GMSServices.provideAPIKey(googleApiKey)
         

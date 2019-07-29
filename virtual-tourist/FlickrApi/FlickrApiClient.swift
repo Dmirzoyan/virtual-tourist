@@ -16,7 +16,7 @@ protocol FlickrApiAccessing {
 
 final class FlickrApiClient: FlickrApiAccessing {
     
-    private static let apiKey = "YOUR FLICKR API KEY"
+    private static let apiKey = "Flickr API Key"
     
     enum Endpoints {
         static let base = "https://api.flickr.com/services/rest/"
@@ -64,7 +64,7 @@ final class FlickrApiClient: FlickrApiAccessing {
         task.resume()
     }
     
-    private func handleResponse(photos: [Photo], completion: @escaping SearchPhotosCompletion) {
+    private func handleResponse(photos: [PhotoResponse], completion: @escaping SearchPhotosCompletion) {
         var flickrPhotos = [FlickrPhoto]()
         
         photos.forEach { photo in

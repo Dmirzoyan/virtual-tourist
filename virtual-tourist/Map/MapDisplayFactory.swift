@@ -24,7 +24,8 @@ final class MapDisplayFactory: MapDisplayProducing {
         let interactor = MapInteractor(
             router: router,
             presenter: presenter,
-            geocoder: GMSGeocoder()
+            geocoder: GMSGeocoder(),
+            dataController: Dependencies.dataController
         )
         
         viewController.interactor = interactor

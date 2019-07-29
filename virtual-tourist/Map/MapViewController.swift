@@ -10,8 +10,10 @@ import UIKit
 import GoogleMaps
 
 protocol MapInteracting {
-    func viewLocation(with coordinate: CLLocationCoordinate2D)
+    func viewNewLocation(for coordinate: CLLocationCoordinate2D)
+    func viewSavedLocation(for coordinate: CLLocationCoordinate2D)
     func loadNewImages()
+    func loadSavedLocations()
 }
 
 final class MapViewController: UIViewController {
@@ -42,6 +44,12 @@ final class MapViewController: UIViewController {
         setupMapView()
         locationManager.requestWhenInUseAuthorization()        
         popupView.delegate = self
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        interactor.loadSavedLocations()
     }
     
     private func setupMapView() {
@@ -92,7 +100,6 @@ extension MapViewController: CLLocationManagerDelegate {
 extension MapViewController: GMSMapViewDelegate {
     
     func mapView(_ mapView: GMSMapView, didTap marker: GMSMarker) -> Bool {
-//        strongSelf.popupView.set(street: street, city: city)
         if popupViewAnimator.currentState == PopupState.closed {
             popupViewAnimator.animateTransitionIfNeeded(
                 to: PopupState.preview,
@@ -102,8 +109,8 @@ extension MapViewController: GMSMapViewDelegate {
             
             animateMapPadding(height: popupPreviewHeight)
         }
-        
         select(marker)
+        interactor.viewSavedLocation(for: marker.position)
         
         return true
     }
@@ -124,7 +131,7 @@ extension MapViewController: GMSMapViewDelegate {
         feedbackGenerator.impactOccurred()
         addMarker(at: position)
         
-        interactor.viewLocation(with: coordinate)
+        interactor.viewNewLocation(for: coordinate)
     }
     
     func mapView(_ mapView: GMSMapView, didChange position: GMSCameraPosition) {
@@ -229,6 +236,12 @@ extension MapViewController: MapDisplaying {
         }
         
         popupView.set(viewState: viewState)
+    }
+    
+    func display(_ pins: [Pin]) {
+        pins.forEach { pin in
+            addMarker(at: CLLocationCoordinate2D(latitude: pin.latitude, longitude: pin.longitude))
+        }
     }
     
     func displayAlert(with message: String) {

@@ -37,6 +37,10 @@
 		AC54921F22DE5DFC003F866A /* FlickrPhoto.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC54921E22DE5DFC003F866A /* FlickrPhoto.swift */; };
 		AC54922522E1F10B003F866A /* SearchPhotosResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC54922422E1F10B003F866A /* SearchPhotosResponse.swift */; };
 		AC54922722E1F161003F866A /* SearchPhotosFailedResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC54922622E1F161003F866A /* SearchPhotosFailedResponse.swift */; };
+		AC96AAD922EE0EB400474020 /* LocationDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = AC96AAD722EE0EB400474020 /* LocationDataModel.xcdatamodeld */; };
+		AC96AADB22EE14C000474020 /* DataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC96AADA22EE14C000474020 /* DataController.swift */; };
+		AC96AADE22EE16D000474020 /* Dependencies.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC96AADD22EE16D000474020 /* Dependencies.swift */; };
+		AC96AAE122EF72A500474020 /* Pin+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC96AAE022EF72A500474020 /* Pin+Extension.swift */; };
 		ACDA9E6622EC620800DC77CA /* Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACDA9E6522EC620800DC77CA /* Button.swift */; };
 /* End PBXBuildFile section */
 
@@ -73,6 +77,10 @@
 		AC54921E22DE5DFC003F866A /* FlickrPhoto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickrPhoto.swift; sourceTree = "<group>"; };
 		AC54922422E1F10B003F866A /* SearchPhotosResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchPhotosResponse.swift; sourceTree = "<group>"; };
 		AC54922622E1F161003F866A /* SearchPhotosFailedResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchPhotosFailedResponse.swift; sourceTree = "<group>"; };
+		AC96AAD822EE0EB400474020 /* LocationDataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = LocationDataModel.xcdatamodel; sourceTree = "<group>"; };
+		AC96AADA22EE14C000474020 /* DataController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataController.swift; sourceTree = "<group>"; };
+		AC96AADD22EE16D000474020 /* Dependencies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dependencies.swift; sourceTree = "<group>"; };
+		AC96AAE022EF72A500474020 /* Pin+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Pin+Extension.swift"; sourceTree = "<group>"; };
 		ACDA9E6522EC620800DC77CA /* Button.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Button.swift; sourceTree = "<group>"; };
 		AE2C9A74DD9E3BA62C08DFF7 /* Pods-virtual-tourist.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-virtual-tourist.release.xcconfig"; path = "Target Support Files/Pods-virtual-tourist/Pods-virtual-tourist.release.xcconfig"; sourceTree = "<group>"; };
 		CC840F13B824F53FBCC42A76 /* Pods-virtual-tourist.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-virtual-tourist.debug.xcconfig"; path = "Target Support Files/Pods-virtual-tourist/Pods-virtual-tourist.debug.xcconfig"; sourceTree = "<group>"; };
@@ -184,6 +192,8 @@
 		AC4708CD22C0AED400147E5C /* virtual-tourist */ = {
 			isa = PBXGroup;
 			children = (
+				AC96AADC22EE16BC00474020 /* Dependencies */,
+				AC96AAD622EE0DCD00474020 /* Model */,
 				AC40FAAE22E3847B003A2691 /* Theme */,
 				AC40FAAB22E36856003A2691 /* Components */,
 				AC54921922DE5180003F866A /* FlickrApi */,
@@ -232,6 +242,32 @@
 				AC54922622E1F161003F866A /* SearchPhotosFailedResponse.swift */,
 			);
 			path = Responses;
+			sourceTree = "<group>";
+		};
+		AC96AAD622EE0DCD00474020 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				AC96AADF22EF727400474020 /* Extensions */,
+				AC96AAD722EE0EB400474020 /* LocationDataModel.xcdatamodeld */,
+				AC96AADA22EE14C000474020 /* DataController.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		AC96AADC22EE16BC00474020 /* Dependencies */ = {
+			isa = PBXGroup;
+			children = (
+				AC96AADD22EE16D000474020 /* Dependencies.swift */,
+			);
+			path = Dependencies;
+			sourceTree = "<group>";
+		};
+		AC96AADF22EF727400474020 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				AC96AAE022EF72A500474020 /* Pin+Extension.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 		B17BC0678BC3256D666F14CB /* Pods */ = {
@@ -398,14 +434,18 @@
 				AC4708CF22C0AED400147E5C /* AppDelegate.swift in Sources */,
 				AC40FAAD22E36866003A2691 /* DecoratedButton.swift in Sources */,
 				AC40FAB722E4EE10003A2691 /* PopupProgressCollectionViewCell.swift in Sources */,
+				AC96AADB22EE14C000474020 /* DataController.swift in Sources */,
 				AC54922522E1F10B003F866A /* SearchPhotosResponse.swift in Sources */,
 				AC4708EB22C0AF9600147E5C /* MapViewController.swift in Sources */,
+				AC96AAD922EE0EB400474020 /* LocationDataModel.xcdatamodeld in Sources */,
 				AC40FAB222E38515003A2691 /* TextAttributes.swift in Sources */,
 				AC45934F22D1D4EF0061EBD8 /* PopupCollectionViewCell.swift in Sources */,
+				AC96AAE122EF72A500474020 /* Pin+Extension.swift in Sources */,
 				AC4708EE22C0AF9600147E5C /* MapInteractor.swift in Sources */,
 				AC45934922D0DC5E0061EBD8 /* PopupViewAnimator.swift in Sources */,
 				AC4708D722C0AED400147E5C /* virtual_tourist.xcdatamodeld in Sources */,
 				AC4708F122C0AF9600147E5C /* MapDisplayFactory.swift in Sources */,
+				AC96AADE22EE16D000474020 /* Dependencies.swift in Sources */,
 				ACDA9E6622EC620800DC77CA /* Button.swift in Sources */,
 				AC40FABC22E4F31F003A2691 /* PopupViewDataSource.swift in Sources */,
 				AC54921B22DE51AD003F866A /* FlickrApiClient.swift in Sources */,
@@ -613,6 +653,16 @@
 			);
 			currentVersion = AC4708D622C0AED400147E5C /* virtual_tourist.xcdatamodel */;
 			path = virtual_tourist.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+		AC96AAD722EE0EB400474020 /* LocationDataModel.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				AC96AAD822EE0EB400474020 /* LocationDataModel.xcdatamodel */,
+			);
+			currentVersion = AC96AAD822EE0EB400474020 /* LocationDataModel.xcdatamodel */;
+			path = LocationDataModel.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
 		};

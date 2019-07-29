@@ -12,10 +12,10 @@ struct SearchPhotosResponse: Codable {
 }
 
 struct PhotosContainer: Codable {
-    let photo: [Photo]
+    let photo: [PhotoResponse]
 }
 
-struct Photo: Codable {
+struct PhotoResponse: Codable {
     let id: String
     let secret: String
     let server: String
