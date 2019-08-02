@@ -6,8 +6,7 @@
 //  Copyright © 2019. All rights reserved.
 //
 
-import GoogleMaps
-import CoreData
+import Foundation
 
 protocol MapPresenting {
     func preview(_ address: Address)
@@ -21,164 +20,112 @@ final class MapInteractor: MapInteracting {
     
     private let router: MapInternalRoute
     private let presenter: MapPresenting
-    private let geocoder: GMSGeocoder
-    private let dataController: DataController
+    private let geocoder: Geocoding
+    private let locationPersistenceManager: LocationPersistenceManaging
     
-    private var pinToAdd: Pin?
-    private var fetchedResultsController: NSFetchedResultsController<Pin>!
-    private var currentCoordinate: CLLocationCoordinate2D?
+    private var currentLocation = Location(
+        address: Address(city: "", street: ""),
+        photos: [],
+        coordinate: Coordinate(latitude: 0, longitude: 0)
+    )
     
     init(
         router: MapInternalRoute,
         presenter: MapPresenting,
-        geocoder: GMSGeocoder,
-        dataController: DataController
+        geocoder: Geocoding,
+        locationPersistenceManager: LocationPersistenceManaging
     ) {
         self.router = router
         self.presenter = presenter
         self.geocoder = geocoder
-        self.dataController = dataController
+        self.locationPersistenceManager = locationPersistenceManager
     }
     
     func loadSavedLocations() {
-        let request: NSFetchRequest<Pin> = Pin.fetchRequest()
-        let sortDescriptor = NSSortDescriptor(key: "addedDate", ascending: true)
-        request.sortDescriptors = [sortDescriptor]
-        
-        fetchedResultsController = NSFetchedResultsController(
-            fetchRequest: request,
-            managedObjectContext: dataController.viewContext,
-            sectionNameKeyPath: nil,
-            cacheName: "pins"
-        )
-        
-        do {
-            try fetchedResultsController.performFetch()
-            
-            guard
-                let pins = fetchedResultsController.fetchedObjects,
-                let photos = pins.last?.photos as? Set<Photo>,
-                let city = pins.last?.city,
-                let street = pins.last?.street
-            else { return }
-            
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [weak self] in
-                guard
-                    let strongSelf = self
-                else { return }
-                
-                strongSelf.presenter.preview(Address(city: city, street: street))
-                strongSelf.presenter.present(strongSelf.ordered(photos))
+        locationPersistenceManager.load { [weak self] pins, locationToDisplay in
+            guard let locationToDisplay = locationToDisplay
+            else {
+                presenter.presentAlert(with: "Failed loading saved locations!")
+                return
             }
             
-            presenter.present(pins)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [weak self] in
+                self?.presenter.preview(locationToDisplay.address)
+                self?.presenter.present(locationToDisplay.photos)
+            }
             
-        } catch {
-            presenter.presentAlert(with: "Failed loading saved locations!")
+            self?.presenter.present(pins)
+            
+            currentLocation.address = locationToDisplay.address
+            currentLocation.coordinate = locationToDisplay.coordinate
         }
     }
     
-    func viewNewLocation(for coordinate: CLLocationCoordinate2D) {
-        reverseGeocodeCoordinate(coordinate) { [weak self] success, street, city in
+    func viewSavedLocation(for coordinate: Coordinate) {
+        locationPersistenceManager.getLocation(for: coordinate) { location in
+            guard let location = location
+            else { return }
+            
+            presenter.preview(location.address)
+            presenter.present(location.photos)
+            
+            currentLocation.address = location.address
+            currentLocation.coordinate = location.coordinate
+        }
+    }
+    
+    func viewNewLocation(for coordinate: Coordinate) {
+        geocoder.reverseGeocodeCoordinate(coordinate) { [weak self] success, address in
             guard
                 success == true,
-                let strongSelf = self
+                let address = address
             else { return }
-
-            strongSelf.pinToAdd = Pin(context: strongSelf.dataController.viewContext)
-            strongSelf.pinToAdd?.city = city
-            strongSelf.pinToAdd?.street = street
-            strongSelf.pinToAdd?.latitude = coordinate.latitude
-            strongSelf.pinToAdd?.longitude = coordinate.longitude
             
-            strongSelf.presenter.preview(Address(city: city, street: street))
+            self?.currentLocation.address = address
+            self?.presenter.preview(address)
         }
-        loadImages(for: coordinate)
-        currentCoordinate = coordinate
-    }
-    
-    func viewSavedLocation(for coordinate: CLLocationCoordinate2D) {
-        guard
-            let pin = fetchedResultsController.fetchedObjects?.first(
-                where: { $0.latitude == coordinate.latitude && $0.longitude == coordinate.longitude }
-            ),
-            let photos = pin.photos as? Set<Photo>
-        else { return }
         
-        presenter.present(ordered(photos))
+        loadImages(for: coordinate) { [weak self] photos in
+            guard let strongSelf = self
+            else { return }
+            
+            strongSelf.locationPersistenceManager.save(
+                Location(address: strongSelf.currentLocation.address, photos: photos, coordinate: coordinate)
+            )
+        }
+        
+        currentLocation.coordinate = coordinate
     }
     
     func loadNewImages() {
-        guard let coordinate = currentCoordinate
-        else { return }
-        
-        loadImages(for: coordinate)
+        loadImages(for: currentLocation.coordinate) { [weak self] photos in
+            guard let strongSelf = self
+            else { return }
+            
+            strongSelf.locationPersistenceManager.update(photos, for: strongSelf.currentLocation.coordinate)
+        }
     }
     
-    private func loadImages(for coordinate: CLLocationCoordinate2D) {
+    private func loadImages(for coordinate: Coordinate, completion: @escaping ([Photo]) -> Void) {
         FlickrApiClient().getImages(
             latitude: coordinate.latitude,
             longitude: coordinate.longitude
         ) { [weak self] flickrPhotos, error in
             guard
-                let flickrPhotos = flickrPhotos,
                 error == nil,
-                let strongSelf = self
-            else {
-                self?.presenter.presentAlert(with: "Could not retrieve images")
-                return
+                let strongSelf = self,
+                let flickrPhotos = flickrPhotos
+                else {
+                    self?.presenter.presentAlert(with: "Could not retrieve images")
+                    return
             }
             
-            let photos = strongSelf.transform(flickrPhotos)
-            strongSelf.saveLocation(photos: photos)
+            let photos = strongSelf.locationPersistenceManager.transform(flickrPhotos: flickrPhotos)
             strongSelf.presenter.present(photos)
+            
+            completion(photos)
         }
         
         presenter.presentLoadingProgress()
-    }
-    
-    private func transform(_ flickrPhotos: [FlickrPhoto]) -> [Photo] {
-        var photos: [Photo] = []
-        
-        for (index, flickrPhoto) in flickrPhotos.enumerated() {
-            let photo = Photo(context: dataController.viewContext)
-            
-            photo.title = flickrPhoto.title
-            photo.url = flickrPhoto.imageUrl()?.absoluteString
-            photo.thumbnailData = flickrPhoto.thumbnail?.pngData()
-            photo.pin = pinToAdd
-            photo.index = Int16(index)
-            
-            photos.append(photo)
-        }
-        
-        return photos
-    }
-    
-    private func saveLocation(photos: [Photo]) {
-        try? dataController.viewContext.save()
-    }
-    
-    private func ordered(_ photos: Set<Photo>) -> [Photo] {
-        return photos.sorted(by: { (p1, p2) -> Bool in p1.index < p2.index })
-    }
-    
-    private func reverseGeocodeCoordinate(
-        _ coordinate: CLLocationCoordinate2D,
-        completion: @escaping (Bool, String, String) -> Void
-    ) {
-        geocoder.reverseGeocodeCoordinate(coordinate) { response, error in
-            guard
-                let address = response?.firstResult(),
-                let street = address.thoroughfare,
-                let city = address.locality,
-                let country = address.country
-            else {
-                completion(false, "", "")
-                return
-            }
-            
-            completion(true, street, "\(city), \(country)");
-        }
     }
 }

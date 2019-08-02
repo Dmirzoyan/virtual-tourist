@@ -41,6 +41,10 @@
 		AC96AADB22EE14C000474020 /* DataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC96AADA22EE14C000474020 /* DataController.swift */; };
 		AC96AADE22EE16D000474020 /* Dependencies.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC96AADD22EE16D000474020 /* Dependencies.swift */; };
 		AC96AAE122EF72A500474020 /* Pin+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC96AAE022EF72A500474020 /* Pin+Extension.swift */; };
+		AC96AAE422F205A100474020 /* LocationPersistenceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC96AAE322F205A100474020 /* LocationPersistenceManager.swift */; };
+		AC96AAE822F344D600474020 /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC96AAE722F344D600474020 /* Location.swift */; };
+		AC96AAEB22F3452600474020 /* Coordinate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC96AAEA22F3452600474020 /* Coordinate.swift */; };
+		AC96AAED22F4A8A400474020 /* Geocoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC96AAEC22F4A8A400474020 /* Geocoder.swift */; };
 		ACDA9E6622EC620800DC77CA /* Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACDA9E6522EC620800DC77CA /* Button.swift */; };
 /* End PBXBuildFile section */
 
@@ -81,6 +85,10 @@
 		AC96AADA22EE14C000474020 /* DataController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataController.swift; sourceTree = "<group>"; };
 		AC96AADD22EE16D000474020 /* Dependencies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dependencies.swift; sourceTree = "<group>"; };
 		AC96AAE022EF72A500474020 /* Pin+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Pin+Extension.swift"; sourceTree = "<group>"; };
+		AC96AAE322F205A100474020 /* LocationPersistenceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationPersistenceManager.swift; sourceTree = "<group>"; };
+		AC96AAE722F344D600474020 /* Location.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
+		AC96AAEA22F3452600474020 /* Coordinate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinate.swift; sourceTree = "<group>"; };
+		AC96AAEC22F4A8A400474020 /* Geocoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Geocoder.swift; sourceTree = "<group>"; };
 		ACDA9E6522EC620800DC77CA /* Button.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Button.swift; sourceTree = "<group>"; };
 		AE2C9A74DD9E3BA62C08DFF7 /* Pods-virtual-tourist.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-virtual-tourist.release.xcconfig"; path = "Target Support Files/Pods-virtual-tourist/Pods-virtual-tourist.release.xcconfig"; sourceTree = "<group>"; };
 		CC840F13B824F53FBCC42A76 /* Pods-virtual-tourist.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-virtual-tourist.debug.xcconfig"; path = "Target Support Files/Pods-virtual-tourist/Pods-virtual-tourist.debug.xcconfig"; sourceTree = "<group>"; };
@@ -212,6 +220,8 @@
 		AC4708E322C0AF7000147E5C /* Map */ = {
 			isa = PBXGroup;
 			children = (
+				AC96AAE922F344DF00474020 /* Types */,
+				AC96AAE222F2055A00474020 /* Workers */,
 				AC4708E422C0AF9600147E5C /* MapViewController.swift */,
 				AC4708E522C0AF9600147E5C /* MapViewController.xib */,
 				AC4708E622C0AF9600147E5C /* MapRouterFactory.swift */,
@@ -219,7 +229,6 @@
 				AC4708E822C0AF9600147E5C /* MapRouter.swift */,
 				AC4708E922C0AF9600147E5C /* MapPresenter.swift */,
 				AC4708EA22C0AF9600147E5C /* MapDisplayFactory.swift */,
-				AC54921722DB18BD003F866A /* Address.swift */,
 				AC4708F222C1628C00147E5C /* MapStyle.geojson */,
 			);
 			path = Map;
@@ -268,6 +277,25 @@
 				AC96AAE022EF72A500474020 /* Pin+Extension.swift */,
 			);
 			path = Extensions;
+			sourceTree = "<group>";
+		};
+		AC96AAE222F2055A00474020 /* Workers */ = {
+			isa = PBXGroup;
+			children = (
+				AC96AAE322F205A100474020 /* LocationPersistenceManager.swift */,
+				AC96AAEC22F4A8A400474020 /* Geocoder.swift */,
+			);
+			path = Workers;
+			sourceTree = "<group>";
+		};
+		AC96AAE922F344DF00474020 /* Types */ = {
+			isa = PBXGroup;
+			children = (
+				AC54921722DB18BD003F866A /* Address.swift */,
+				AC96AAE722F344D600474020 /* Location.swift */,
+				AC96AAEA22F3452600474020 /* Coordinate.swift */,
+			);
+			path = Types;
 			sourceTree = "<group>";
 		};
 		B17BC0678BC3256D666F14CB /* Pods */ = {
@@ -425,6 +453,7 @@
 			files = (
 				AC45934522D0D6700061EBD8 /* PopupState.swift in Sources */,
 				AC4708ED22C0AF9600147E5C /* MapRouterFactory.swift in Sources */,
+				AC96AAEB22F3452600474020 /* Coordinate.swift in Sources */,
 				AC40FAB022E38490003A2691 /* AppTheme.swift in Sources */,
 				AC40FAB522E4E91F003A2691 /* PopupViewState.swift in Sources */,
 				AC54921822DB18BD003F866A /* Address.swift in Sources */,
@@ -432,18 +461,21 @@
 				AC45934722D0DACE0061EBD8 /* PopupView.swift in Sources */,
 				AC54921F22DE5DFC003F866A /* FlickrPhoto.swift in Sources */,
 				AC4708CF22C0AED400147E5C /* AppDelegate.swift in Sources */,
+				AC96AAE422F205A100474020 /* LocationPersistenceManager.swift in Sources */,
 				AC40FAAD22E36866003A2691 /* DecoratedButton.swift in Sources */,
 				AC40FAB722E4EE10003A2691 /* PopupProgressCollectionViewCell.swift in Sources */,
 				AC96AADB22EE14C000474020 /* DataController.swift in Sources */,
 				AC54922522E1F10B003F866A /* SearchPhotosResponse.swift in Sources */,
 				AC4708EB22C0AF9600147E5C /* MapViewController.swift in Sources */,
 				AC96AAD922EE0EB400474020 /* LocationDataModel.xcdatamodeld in Sources */,
+				AC96AAED22F4A8A400474020 /* Geocoder.swift in Sources */,
 				AC40FAB222E38515003A2691 /* TextAttributes.swift in Sources */,
 				AC45934F22D1D4EF0061EBD8 /* PopupCollectionViewCell.swift in Sources */,
 				AC96AAE122EF72A500474020 /* Pin+Extension.swift in Sources */,
 				AC4708EE22C0AF9600147E5C /* MapInteractor.swift in Sources */,
 				AC45934922D0DC5E0061EBD8 /* PopupViewAnimator.swift in Sources */,
 				AC4708D722C0AED400147E5C /* virtual_tourist.xcdatamodeld in Sources */,
+				AC96AAE822F344D600474020 /* Location.swift in Sources */,
 				AC4708F122C0AF9600147E5C /* MapDisplayFactory.swift in Sources */,
 				AC96AADE22EE16D000474020 /* Dependencies.swift in Sources */,
 				ACDA9E6622EC620800DC77CA /* Button.swift in Sources */,

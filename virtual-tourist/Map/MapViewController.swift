@@ -10,8 +10,8 @@ import UIKit
 import GoogleMaps
 
 protocol MapInteracting {
-    func viewNewLocation(for coordinate: CLLocationCoordinate2D)
-    func viewSavedLocation(for coordinate: CLLocationCoordinate2D)
+    func viewNewLocation(for coordinate: Coordinate)
+    func viewSavedLocation(for coordinate: Coordinate)
     func loadNewImages()
     func loadSavedLocations()
 }
@@ -100,17 +100,13 @@ extension MapViewController: CLLocationManagerDelegate {
 extension MapViewController: GMSMapViewDelegate {
     
     func mapView(_ mapView: GMSMapView, didTap marker: GMSMarker) -> Bool {
-        if popupViewAnimator.currentState == PopupState.closed {
-            popupViewAnimator.animateTransitionIfNeeded(
-                to: PopupState.preview,
-                isInteractionEnabled: false,
-                duration: Constants.animationDuration
-            )
-            
-            animateMapPadding(height: popupPreviewHeight)
-        }
+        animateAddressPreviewIfNeeded()
         select(marker)
-        interactor.viewSavedLocation(for: marker.position)
+        
+        interactor.viewSavedLocation(for: Coordinate(
+            latitude: marker.position.latitude,
+            longitude: marker.position.longitude)
+        )
         
         return true
     }
@@ -131,7 +127,7 @@ extension MapViewController: GMSMapViewDelegate {
         feedbackGenerator.impactOccurred()
         addMarker(at: position)
         
-        interactor.viewNewLocation(for: coordinate)
+        interactor.viewNewLocation(for: Coordinate(latitude: coordinate.latitude, longitude: coordinate.longitude))
     }
     
     func mapView(_ mapView: GMSMapView, didChange position: GMSCameraPosition) {
@@ -159,18 +155,29 @@ extension MapViewController: GMSMapViewDelegate {
         return opacity
     }
     
-    private func animateMarker(_ marker: GMSMarker) {
-        let velocity = CGVector(dx: 1.0, dy: 1.0)
-        let timing = UISpringTimingParameters(dampingRatio: 0.3, initialVelocity: velocity)
-        let animator = UIViewPropertyAnimator(duration: 0.6, timingParameters: timing)
-        animator.addAnimations { marker.iconView?.transform = CGAffineTransform(scaleX: 1.5, y: 1.5) }
-        animator.startAnimation()
+    private func animateAddressPreviewIfNeeded() {
+        if popupViewAnimator.currentState == PopupState.closed {
+            popupViewAnimator.animateTransitionIfNeeded(
+                to: PopupState.preview,
+                isInteractionEnabled: false,
+                duration: Constants.animationDuration
+            )
+            animateMapPadding(height: popupPreviewHeight)
+        }
     }
     
     private func animateMapPadding(height: CGFloat) {
         let animator = UIViewPropertyAnimator.init(duration: Constants.animationDuration, dampingRatio: 1) {
             self.mapView.padding = UIEdgeInsets(top: 0, left: 0, bottom: height, right: 0)
         }
+        animator.startAnimation()
+    }
+    
+    private func animateMarker(_ marker: GMSMarker) {
+        let velocity = CGVector(dx: 1.0, dy: 1.0)
+        let timing = UISpringTimingParameters(dampingRatio: 0.3, initialVelocity: velocity)
+        let animator = UIViewPropertyAnimator(duration: 0.6, timingParameters: timing)
+        animator.addAnimations { marker.iconView?.transform = CGAffineTransform(scaleX: 1.5, y: 1.5) }
         animator.startAnimation()
     }
 }
@@ -226,15 +233,7 @@ extension MapViewController {
 extension MapViewController: MapDisplaying {
     
     func display(_ viewState: PopupViewState) {
-        if viewState.changes.address.isChanged && popupViewAnimator.currentState == PopupState.closed {
-            popupViewAnimator.animateTransitionIfNeeded(
-                to: PopupState.preview,
-                isInteractionEnabled: false,
-                duration: Constants.animationDuration
-            )
-            animateMapPadding(height: popupPreviewHeight)
-        }
-        
+        if viewState.changes.address.isChanged { animateAddressPreviewIfNeeded() }
         popupView.set(viewState: viewState)
     }
     
