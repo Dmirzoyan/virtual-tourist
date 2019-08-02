@@ -15,6 +15,8 @@ protocol LocationPersistenceManaging {
     func save(_ location: Location)
     func update(_ photos: [Photo], for coordiate: Coordinate)
     func transform(flickrPhotos: [FlickrPhoto]) -> [Photo]
+    func deletePhoto(for coordinate: Coordinate, at index: Int)
+    func deletePin(for coordinate: Coordinate)
 }
 
 final class LocationPersistenceManager: LocationPersistenceManaging {
@@ -119,6 +121,24 @@ final class LocationPersistenceManager: LocationPersistenceManaging {
         }
         
         return photos
+    }
+    
+    func deletePhoto(for coordinate: Coordinate, at index: Int) {
+        guard
+            let pin = pin(with: coordinate.latitude, longitude: coordinate.longitude),
+            let photos = pin.photos as? Set<Photo>
+        else { return }
+        
+        dataController.viewContext.delete(ordered(photos)[index])
+        try? dataController.viewContext.save()
+    }
+    
+    func deletePin(for coordinate: Coordinate) {
+        guard let pin = pin(with: coordinate.latitude, longitude: coordinate.longitude)
+        else { return }
+        
+        dataController.viewContext.delete(pin)
+        try? dataController.viewContext.save()
     }
     
     private func ordered(_ photos: Set<Photo>) -> [Photo] {

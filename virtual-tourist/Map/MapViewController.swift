@@ -14,6 +14,8 @@ protocol MapInteracting {
     func viewSavedLocation(for coordinate: Coordinate)
     func loadNewImages()
     func loadSavedLocations()
+    func imageDeleted(at index: Int)
+    func pinDeleted()
 }
 
 final class MapViewController: UIViewController {
@@ -24,11 +26,14 @@ final class MapViewController: UIViewController {
     var popupView: PopupView!
     var popupViewAnimator: PopupViewAnimating!
     var popupPreviewHeight: CGFloat!
+    var deletePinButton: RoundButton!
+    var deletePinButtonBottomConstraint: NSLayoutConstraint!
     
     @IBOutlet weak var mapView: GMSMapView!
     
     private var mapOverlay: GMSCircle?
     private var mapMarkers: [GMSMarker] = []
+    private var selectedMarker: GMSMarker!
     private let markerIcon = UIImage(named: "marker")
     
     private struct Constants {
@@ -36,14 +41,37 @@ final class MapViewController: UIViewController {
         static let initialZoom: Float = 13
         static let minOverlayZoom: Float = 7
         static let animationDuration = 0.8
+        static let deletePinButtonWidth: CGFloat = 56
+        static let deletePinButtonBottomConstraint: CGFloat = 80
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         setupMapView()
-        locationManager.requestWhenInUseAuthorization()        
+        setupDeletePinButton()
+        locationManager.requestWhenInUseAuthorization()
         popupView.delegate = self
+    }
+    
+    private func setupDeletePinButton() {
+        deletePinButton = RoundButton()
+        deletePinButton.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(deletePinButton)
+        
+        deletePinButtonBottomConstraint = deletePinButton.bottomAnchor.constraint(
+            equalTo: view.bottomAnchor,
+            constant: -Constants.deletePinButtonBottomConstraint
+        )
+        
+        NSLayoutConstraint.activate([
+            deletePinButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
+            deletePinButtonBottomConstraint
+        ])
+        
+        deletePinButton.width = Constants.deletePinButtonWidth
+        deletePinButton.backgroundColor = .white
+        deletePinButton.delegate = self
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -100,8 +128,8 @@ extension MapViewController: CLLocationManagerDelegate {
 extension MapViewController: GMSMapViewDelegate {
     
     func mapView(_ mapView: GMSMapView, didTap marker: GMSMarker) -> Bool {
-        animateAddressPreviewIfNeeded()
         select(marker)
+        animateAddressPreviewIfNeeded()
         
         interactor.viewSavedLocation(for: Coordinate(
             latitude: marker.position.latitude,
@@ -111,14 +139,16 @@ extension MapViewController: GMSMapViewDelegate {
         return true
     }
     
-    func mapView(_ mapView: GMSMapView, didTapAt coordinate: CLLocationCoordinate2D) {
-        popupViewAnimator.animateTransitionIfNeeded(
-            to: PopupState.closed,
-            isInteractionEnabled: false,
-            duration: Constants.animationDuration
-        )
-        animateMapPadding(height: 0)
-        updateMarkers()
+    func mapView(_ mapView: GMSMapView, didTapAt coordinate: CLLocationCoordinate2D) {        
+        if popupViewAnimator.currentState == .preview {
+            popupViewAnimator.animateTransitionIfNeeded(
+                to: PopupState.closed,
+                isInteractionEnabled: false,
+                duration: Constants.animationDuration
+            )
+            updateMarkers()
+            animateMapPadding(height: 0)
+        }
     }
     
     func mapView(_ mapView: GMSMapView, didLongPressAt coordinate: CLLocationCoordinate2D) {
@@ -157,18 +187,25 @@ extension MapViewController: GMSMapViewDelegate {
     
     private func animateAddressPreviewIfNeeded() {
         if popupViewAnimator.currentState == PopupState.closed {
-            popupViewAnimator.animateTransitionIfNeeded(
-                to: PopupState.preview,
-                isInteractionEnabled: false,
-                duration: Constants.animationDuration
-            )
-            animateMapPadding(height: popupPreviewHeight)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
+                guard let strongSelf = self
+                else { return }
+                
+                strongSelf.popupViewAnimator.animateTransitionIfNeeded(
+                    to: PopupState.preview,
+                    isInteractionEnabled: false,
+                    duration: Constants.animationDuration
+                )
+                strongSelf.animateMapPadding(height: strongSelf.popupPreviewHeight)
+            }
         }
     }
     
     private func animateMapPadding(height: CGFloat) {
         let animator = UIViewPropertyAnimator.init(duration: Constants.animationDuration, dampingRatio: 1) {
             self.mapView.padding = UIEdgeInsets(top: 0, left: 0, bottom: height, right: 0)
+            self.deletePinButtonBottomConstraint.constant = -Constants.deletePinButtonBottomConstraint - height
+            self.view.layoutIfNeeded()
         }
         animator.startAnimation()
     }
@@ -200,6 +237,7 @@ extension MapViewController {
         
         animateMarker(marker)
         mapMarkers.append(marker)
+        selectedMarker = marker
     }
     
     private func updateMarkers() {
@@ -254,5 +292,24 @@ extension MapViewController: PopupViewDelegate {
     
     func getNewImagesButtonPressed() {
         interactor.loadNewImages()
+    }
+    
+    func imageDeleted(at index: Int) {
+        interactor.imageDeleted(at: index)
+    }
+}
+
+extension MapViewController: ButtonDelegate {
+    
+    func isPressed() {
+        remove(selectedMarker)
+        popupViewAnimator.animateTransitionIfNeeded(
+            to: PopupState.closed,
+            isInteractionEnabled: false,
+            duration: Constants.animationDuration
+        )
+        animateMapPadding(height: 0)
+        
+        interactor.pinDeleted()
     }
 }

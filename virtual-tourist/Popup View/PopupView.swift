@@ -10,6 +10,7 @@ import UIKit
 
 protocol PopupViewDelegate {
     func getNewImagesButtonPressed()
+    func imageDeleted(at index: Int)
 }
 
 final class PopupView: UIView {
@@ -220,6 +221,7 @@ final class PopupView: UIView {
             if type == .delete {
                 self?.dataSource.deleteItem(at: indexPath)
                 self?.collectionView.deleteItems(at: [indexPath])
+                self?.delegate?.imageDeleted(at: indexPath.row)
             }
 
             self?.cellEngaged = false
@@ -234,7 +236,6 @@ extension PopupView: UICollectionViewDelegate {}
 
 extension PopupView: ButtonDelegate {
     func isPressed() {
-        
         if button.titleLabel?.text == "DONE" {
             for i in 0 ... dataSource.getItems().count {
                 let cell = self.collectionView.cellForItem(at: IndexPath(item: i, section: 0)) as? PopupCollectionViewCell

@@ -45,6 +45,7 @@
 		AC96AAE822F344D600474020 /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC96AAE722F344D600474020 /* Location.swift */; };
 		AC96AAEB22F3452600474020 /* Coordinate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC96AAEA22F3452600474020 /* Coordinate.swift */; };
 		AC96AAED22F4A8A400474020 /* Geocoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC96AAEC22F4A8A400474020 /* Geocoder.swift */; };
+		AC96AAEF22F4C81B00474020 /* RoundButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC96AAEE22F4C81B00474020 /* RoundButton.swift */; };
 		ACDA9E6622EC620800DC77CA /* Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACDA9E6522EC620800DC77CA /* Button.swift */; };
 /* End PBXBuildFile section */
 
@@ -89,6 +90,7 @@
 		AC96AAE722F344D600474020 /* Location.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
 		AC96AAEA22F3452600474020 /* Coordinate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinate.swift; sourceTree = "<group>"; };
 		AC96AAEC22F4A8A400474020 /* Geocoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Geocoder.swift; sourceTree = "<group>"; };
+		AC96AAEE22F4C81B00474020 /* RoundButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundButton.swift; sourceTree = "<group>"; };
 		ACDA9E6522EC620800DC77CA /* Button.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Button.swift; sourceTree = "<group>"; };
 		AE2C9A74DD9E3BA62C08DFF7 /* Pods-virtual-tourist.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-virtual-tourist.release.xcconfig"; path = "Target Support Files/Pods-virtual-tourist/Pods-virtual-tourist.release.xcconfig"; sourceTree = "<group>"; };
 		CC840F13B824F53FBCC42A76 /* Pods-virtual-tourist.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-virtual-tourist.debug.xcconfig"; path = "Target Support Files/Pods-virtual-tourist/Pods-virtual-tourist.debug.xcconfig"; sourceTree = "<group>"; };
@@ -111,6 +113,7 @@
 			children = (
 				AC40FAAC22E36866003A2691 /* DecoratedButton.swift */,
 				ACDA9E6522EC620800DC77CA /* Button.swift */,
+				AC96AAEE22F4C81B00474020 /* RoundButton.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -466,6 +469,7 @@
 				AC40FAB722E4EE10003A2691 /* PopupProgressCollectionViewCell.swift in Sources */,
 				AC96AADB22EE14C000474020 /* DataController.swift in Sources */,
 				AC54922522E1F10B003F866A /* SearchPhotosResponse.swift in Sources */,
+				AC96AAEF22F4C81B00474020 /* RoundButton.swift in Sources */,
 				AC4708EB22C0AF9600147E5C /* MapViewController.swift in Sources */,
 				AC96AAD922EE0EB400474020 /* LocationDataModel.xcdatamodeld in Sources */,
 				AC96AAED22F4A8A400474020 /* Geocoder.swift in Sources */,

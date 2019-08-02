@@ -49,12 +49,12 @@ final class MapInteractor: MapInteracting {
                 return
             }
             
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [weak self] in
+            self?.presenter.present(pins)
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
                 self?.presenter.preview(locationToDisplay.address)
                 self?.presenter.present(locationToDisplay.photos)
             }
-            
-            self?.presenter.present(pins)
             
             currentLocation.address = locationToDisplay.address
             currentLocation.coordinate = locationToDisplay.coordinate
@@ -104,6 +104,14 @@ final class MapInteractor: MapInteracting {
             
             strongSelf.locationPersistenceManager.update(photos, for: strongSelf.currentLocation.coordinate)
         }
+    }
+    
+    func imageDeleted(at index: Int) {
+        locationPersistenceManager.deletePhoto(for: currentLocation.coordinate, at: index)
+    }
+    
+    func pinDeleted() {
+        locationPersistenceManager.deletePin(for: currentLocation.coordinate)
     }
     
     private func loadImages(for coordinate: Coordinate, completion: @escaping ([Photo]) -> Void) {
