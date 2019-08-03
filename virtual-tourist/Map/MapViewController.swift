@@ -28,13 +28,11 @@ final class MapViewController: UIViewController {
     var popupPreviewHeight: CGFloat!
     var deletePinButton: RoundButton!
     var deletePinButtonBottomConstraint: NSLayoutConstraint!
-    
-    @IBOutlet weak var mapView: GMSMapView!
+    var markerManager: MarkerManaging!
     
     private var mapOverlay: GMSCircle?
-    private var mapMarkers: [GMSMarker] = []
-    private var selectedMarker: GMSMarker!
-    private let markerIcon = UIImage(named: "marker")
+    
+    @IBOutlet weak var mapView: GMSMapView!
     
     private struct Constants {
         static let mapOverlayOpacity: CGFloat = 0.5
@@ -50,6 +48,8 @@ final class MapViewController: UIViewController {
         
         setupMapView()
         setupDeletePinButton()
+        markerManager = MarkerManager(mapView: mapView)
+        
         locationManager.requestWhenInUseAuthorization()
         popupView.delegate = self
     }
@@ -128,8 +128,7 @@ extension MapViewController: CLLocationManagerDelegate {
 extension MapViewController: GMSMapViewDelegate {
     
     func mapView(_ mapView: GMSMapView, didTap marker: GMSMarker) -> Bool {
-        select(marker)
-        animateAddressPreviewIfNeeded()
+        markerManager.select(marker)
         
         interactor.viewSavedLocation(for: Coordinate(
             latitude: marker.position.latitude,
@@ -140,13 +139,13 @@ extension MapViewController: GMSMapViewDelegate {
     }
     
     func mapView(_ mapView: GMSMapView, didTapAt coordinate: CLLocationCoordinate2D) {        
-        if popupViewAnimator.currentState == .preview {
+        if popupViewAnimator.currentState == .preview || popupViewAnimator.currentState == .open {
             popupViewAnimator.animateTransitionIfNeeded(
                 to: PopupState.closed,
                 isInteractionEnabled: false,
                 duration: Constants.animationDuration
             )
-            updateMarkers()
+            markerManager.updateMarkers()
             animateMapPadding(height: 0)
         }
     }
@@ -155,7 +154,7 @@ extension MapViewController: GMSMapViewDelegate {
         let position = CLLocationCoordinate2D(latitude: coordinate.latitude, longitude: coordinate.longitude)
         
         feedbackGenerator.impactOccurred()
-        addMarker(at: position)
+        markerManager.addMarker(at: position)
         
         interactor.viewNewLocation(for: Coordinate(latitude: coordinate.latitude, longitude: coordinate.longitude))
     }
@@ -209,63 +208,6 @@ extension MapViewController: GMSMapViewDelegate {
         }
         animator.startAnimation()
     }
-    
-    private func animateMarker(_ marker: GMSMarker) {
-        let velocity = CGVector(dx: 1.0, dy: 1.0)
-        let timing = UISpringTimingParameters(dampingRatio: 0.3, initialVelocity: velocity)
-        let animator = UIViewPropertyAnimator(duration: 0.6, timingParameters: timing)
-        animator.addAnimations { marker.iconView?.transform = CGAffineTransform(scaleX: 1.5, y: 1.5) }
-        animator.startAnimation()
-    }
-}
-
-extension MapViewController {
-    
-    func select(_ marker: GMSMarker) {
-        remove(marker)
-        updateMarkers()
-        addMarker(at: marker.position)
-    }
-    
-    func addMarker(at position: CLLocationCoordinate2D) {
-        updateMarkers()
-        
-        let marker = GMSMarker(position: position)
-        
-        marker.iconView = UIImageView(image: markerIcon)
-        marker.map = mapView
-        
-        animateMarker(marker)
-        mapMarkers.append(marker)
-        selectedMarker = marker
-    }
-    
-    private func updateMarkers() {
-        var markers: [GMSMarker] = []
-        
-        mapMarkers.forEach { marker in
-            marker.map = nil
-            
-            let newMarker = GMSMarker(position: marker.position)
-            newMarker.icon = markerIcon
-            newMarker.map = mapView
-            
-            markers.append(newMarker)
-        }
-        
-        mapMarkers = markers
-    }
-    
-    private func remove(_ marker: GMSMarker) {
-        marker.map = nil
-        
-        if let index = mapMarkers.firstIndex(where: { mk -> Bool in
-            mk.position.latitude == marker.position.latitude
-                && mk.position.longitude == marker.position.longitude
-        }) {
-            mapMarkers.remove(at: index)
-        }
-    }
 }
 
 extension MapViewController: MapDisplaying {
@@ -277,7 +219,7 @@ extension MapViewController: MapDisplaying {
     
     func display(_ pins: [Pin]) {
         pins.forEach { pin in
-            addMarker(at: CLLocationCoordinate2D(latitude: pin.latitude, longitude: pin.longitude))
+            markerManager.addMarker(at: CLLocationCoordinate2D(latitude: pin.latitude, longitude: pin.longitude))
         }
     }
     
@@ -302,14 +244,16 @@ extension MapViewController: PopupViewDelegate {
 extension MapViewController: ButtonDelegate {
     
     func isPressed() {
-        remove(selectedMarker)
-        popupViewAnimator.animateTransitionIfNeeded(
-            to: PopupState.closed,
-            isInteractionEnabled: false,
-            duration: Constants.animationDuration
-        )
-        animateMapPadding(height: 0)
-        
-        interactor.pinDeleted()
+        if popupViewAnimator.currentState == .preview {
+            markerManager.removeSelectedMarker()
+            popupViewAnimator.animateTransitionIfNeeded(
+                to: PopupState.closed,
+                isInteractionEnabled: false,
+                duration: Constants.animationDuration
+            )
+            animateMapPadding(height: 0)
+            
+            interactor.pinDeleted()
+        }
     }
 }
