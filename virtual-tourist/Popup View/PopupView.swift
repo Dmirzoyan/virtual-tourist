@@ -64,7 +64,7 @@ final class PopupView: UIView {
     }
     
     private func commonInit() {
-        backgroundColor = UIColor.AppTheme.creamyGray
+        backgroundColor = UIColor.AppTheme.dargGray
         layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
         
         addShadow()

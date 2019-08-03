@@ -15,8 +15,8 @@ extension UIColor {
             return UIColor(red: 0, green: 204 / 256, blue: 153 / 256, alpha: 1)
         }
         
-        static var creamyGray: UIColor {
-            return UIColor(red: 244 / 256, green: 255 / 256, blue: 250 / 256, alpha: 1)
+        static var dargGray: UIColor {
+            return UIColor(displayP3Red: 38 / 255, green: 38 / 255, blue: 38 / 255, alpha: 1)
         }
         
         static var darkBlue: UIColor {
