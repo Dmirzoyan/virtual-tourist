@@ -22,7 +22,7 @@ final class MapOverlayManager: MapOverlayManaging {
     }
     
     private struct Constants {
-        static let mapOverlayOpacity: CGFloat = 0.5
+        static let mapOverlayOpacity: CGFloat = 0.2
         static let minOverlayZoom: Float = 7
     }
     

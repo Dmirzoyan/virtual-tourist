@@ -20,7 +20,7 @@ extension UIColor {
         }
         
         static var darkBlue: UIColor {
-            return UIColor(red: 20 / 256, green: 23 / 256, blue: 40 / 256, alpha: 1)
+            return UIColor(red: 20 / 256, green: 23 / 256, blue: 40 / 256, alpha: 0.5)
         }
         
         static var lightGray: UIColor {
