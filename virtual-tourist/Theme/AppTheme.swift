@@ -30,5 +30,9 @@ extension UIColor {
         static var midGray: UIColor {
             return UIColor(red: 160 / 256, green: 164 / 256, blue: 166 / 256, alpha: 1)
         }
+        
+        static var lightRed: UIColor {
+            return UIColor(displayP3Red: 255 / 255, green: 118 / 255, blue: 118 / 255, alpha: 1)
+        }
     }
 }

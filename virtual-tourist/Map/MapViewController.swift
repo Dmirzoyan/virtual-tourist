@@ -30,14 +30,14 @@ final class MapViewController: UIViewController {
     var deletePinButtonBottomConstraint: NSLayoutConstraint!
     var markerManager: MarkerManaging!
     var mapOverlayManager: MapOverlayManaging!
+    var animationCoordinator: AnimationCoordinating!
     
     @IBOutlet weak var mapView: GMSMapView!
     
     private struct Constants {
         static let initialZoom: Float = 13
-        static let animationDuration = 0.8
         static let deletePinButtonWidth: CGFloat = 56
-        static let deletePinButtonBottomConstraint: CGFloat = 80
+        static let deletePinButtonBottomPadding: CGFloat = 80
     }
     
     override func viewDidLoad() {
@@ -55,6 +55,14 @@ final class MapViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
+        animationCoordinator = AnimationCoordinator(
+            parentView: view,
+            mapView: mapView,
+            deletePinButton: deletePinButton,
+            popupPreviewHeight: popupPreviewHeight,
+            popupViewAnimator: popupViewAnimator,
+            deletePinButtonBottomConstraint: deletePinButtonBottomConstraint
+        )
         interactor.loadSavedLocations()
     }
     
@@ -65,7 +73,7 @@ final class MapViewController: UIViewController {
         
         deletePinButtonBottomConstraint = deletePinButton.bottomAnchor.constraint(
             equalTo: view.bottomAnchor,
-            constant: -Constants.deletePinButtonBottomConstraint
+            constant: -Constants.deletePinButtonBottomPadding
         )
         
         NSLayoutConstraint.activate([
@@ -74,7 +82,9 @@ final class MapViewController: UIViewController {
         ])
         
         deletePinButton.width = Constants.deletePinButtonWidth
-        deletePinButton.backgroundColor = .white
+        deletePinButton.isEnabled = false
+        deletePinButton.setImage(UIImage(named: "close"), for: .normal)
+        deletePinButton.backgroundColor = UIColor.white.withAlphaComponent(0.8)
         deletePinButton.delegate = self
     }
     
@@ -138,7 +148,7 @@ extension MapViewController: GMSMapViewDelegate {
     
     func mapView(_ mapView: GMSMapView, didTapAt coordinate: CLLocationCoordinate2D) {
         if popupViewAnimator.currentState == .preview || popupViewAnimator.currentState == .open {
-            animateViewChange(to: PopupState.closed)
+            animationCoordinator.animateViewChange(to: PopupState.closed)
             markerManager.updateMarkers()
         }
     }
@@ -161,27 +171,9 @@ extension MapViewController: GMSMapViewDelegate {
                 guard let strongSelf = self
                 else { return }
                 
-                strongSelf.animateViewChange(to: PopupState.preview)
+                strongSelf.animationCoordinator.animateViewChange(to: PopupState.preview)
             }
         }
-    }
-    
-    private func animateViewChange(to state: PopupState) {
-        popupViewAnimator.animateTransitionIfNeeded(
-            to: state,
-            isInteractionEnabled: false,
-            duration: Constants.animationDuration
-        )
-        animateMapPadding(height: state == .preview ? popupPreviewHeight : 0)
-    }
-    
-    private func animateMapPadding(height: CGFloat) {
-        let animator = UIViewPropertyAnimator.init(duration: Constants.animationDuration, dampingRatio: 1) {
-            self.mapView.padding = UIEdgeInsets(top: 0, left: 0, bottom: height, right: 0)
-            self.deletePinButtonBottomConstraint.constant = -Constants.deletePinButtonBottomConstraint - height
-            self.view.layoutIfNeeded()
-        }
-        animator.startAnimation()
     }
 }
 
@@ -221,7 +213,7 @@ extension MapViewController: ButtonDelegate {
     func isPressed() {
         if popupViewAnimator.currentState == .preview {
             markerManager.removeSelectedMarker()
-            animateViewChange(to: PopupState.closed)
+            animationCoordinator.animateViewChange(to: PopupState.closed)
             interactor.pinDeleted()
         }
     }
