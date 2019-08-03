@@ -29,15 +29,12 @@ final class MapViewController: UIViewController {
     var deletePinButton: RoundButton!
     var deletePinButtonBottomConstraint: NSLayoutConstraint!
     var markerManager: MarkerManaging!
-    
-    private var mapOverlay: GMSCircle?
+    var mapOverlayManager: MapOverlayManaging!
     
     @IBOutlet weak var mapView: GMSMapView!
     
     private struct Constants {
-        static let mapOverlayOpacity: CGFloat = 0.5
         static let initialZoom: Float = 13
-        static let minOverlayZoom: Float = 7
         static let animationDuration = 0.8
         static let deletePinButtonWidth: CGFloat = 56
         static let deletePinButtonBottomConstraint: CGFloat = 80
@@ -49,9 +46,16 @@ final class MapViewController: UIViewController {
         setupMapView()
         setupDeletePinButton()
         markerManager = MarkerManager(mapView: mapView)
+        mapOverlayManager = MapOverlayManager(mapView: mapView)
         
         locationManager.requestWhenInUseAuthorization()
         popupView.delegate = self
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        interactor.loadSavedLocations()
     }
     
     private func setupDeletePinButton() {
@@ -72,12 +76,6 @@ final class MapViewController: UIViewController {
         deletePinButton.width = Constants.deletePinButtonWidth
         deletePinButton.backgroundColor = .white
         deletePinButton.delegate = self
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        interactor.loadSavedLocations()
     }
     
     private func setupMapView() {
@@ -138,15 +136,10 @@ extension MapViewController: GMSMapViewDelegate {
         return true
     }
     
-    func mapView(_ mapView: GMSMapView, didTapAt coordinate: CLLocationCoordinate2D) {        
+    func mapView(_ mapView: GMSMapView, didTapAt coordinate: CLLocationCoordinate2D) {
         if popupViewAnimator.currentState == .preview || popupViewAnimator.currentState == .open {
-            popupViewAnimator.animateTransitionIfNeeded(
-                to: PopupState.closed,
-                isInteractionEnabled: false,
-                duration: Constants.animationDuration
-            )
+            animateViewChange(to: PopupState.closed)
             markerManager.updateMarkers()
-            animateMapPadding(height: 0)
         }
     }
     
@@ -155,33 +148,11 @@ extension MapViewController: GMSMapViewDelegate {
         
         feedbackGenerator.impactOccurred()
         markerManager.addMarker(at: position)
-        
         interactor.viewNewLocation(for: Coordinate(latitude: coordinate.latitude, longitude: coordinate.longitude))
     }
     
     func mapView(_ mapView: GMSMapView, didChange position: GMSCameraPosition) {
-        mapOverlay?.map = nil
-        
-        guard position.zoom > Constants.minOverlayZoom
-        else { return }
-        
-        updateMapOverlay(for: position)
-    }
-    
-    private func updateMapOverlay(for position: GMSCameraPosition) {
-        mapOverlay = GMSCircle(position: position.target, radius: 2000000)
-        mapOverlay?.fillColor = UIColor(red: 133/256, green: 113/256, blue: 217/256, alpha: opacity(for: position.zoom))
-        mapOverlay?.map = mapView
-    }
-    
-    private func opacity(for zoom: Float) -> CGFloat {
-        var opacity: CGFloat = Constants.mapOverlayOpacity
-        
-        if zoom <= Constants.minOverlayZoom + 1 {
-            opacity = CGFloat(zoom - Constants.minOverlayZoom) / 2
-        }
-        
-        return opacity
+        mapOverlayManager.updateMapOverlay(for: position)
     }
     
     private func animateAddressPreviewIfNeeded() {
@@ -190,14 +161,18 @@ extension MapViewController: GMSMapViewDelegate {
                 guard let strongSelf = self
                 else { return }
                 
-                strongSelf.popupViewAnimator.animateTransitionIfNeeded(
-                    to: PopupState.preview,
-                    isInteractionEnabled: false,
-                    duration: Constants.animationDuration
-                )
-                strongSelf.animateMapPadding(height: strongSelf.popupPreviewHeight)
+                strongSelf.animateViewChange(to: PopupState.preview)
             }
         }
+    }
+    
+    private func animateViewChange(to state: PopupState) {
+        popupViewAnimator.animateTransitionIfNeeded(
+            to: state,
+            isInteractionEnabled: false,
+            duration: Constants.animationDuration
+        )
+        animateMapPadding(height: state == .preview ? popupPreviewHeight : 0)
     }
     
     private func animateMapPadding(height: CGFloat) {
@@ -246,13 +221,7 @@ extension MapViewController: ButtonDelegate {
     func isPressed() {
         if popupViewAnimator.currentState == .preview {
             markerManager.removeSelectedMarker()
-            popupViewAnimator.animateTransitionIfNeeded(
-                to: PopupState.closed,
-                isInteractionEnabled: false,
-                duration: Constants.animationDuration
-            )
-            animateMapPadding(height: 0)
-            
+            animateViewChange(to: PopupState.closed)
             interactor.pinDeleted()
         }
     }

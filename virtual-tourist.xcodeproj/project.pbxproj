@@ -47,6 +47,7 @@
 		AC96AAED22F4A8A400474020 /* Geocoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC96AAEC22F4A8A400474020 /* Geocoder.swift */; };
 		AC96AAEF22F4C81B00474020 /* RoundButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC96AAEE22F4C81B00474020 /* RoundButton.swift */; };
 		AC96AAF122F5982100474020 /* MarkerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC96AAF022F5982100474020 /* MarkerManager.swift */; };
+		AC96AAF522F59DDF00474020 /* MapOverlayManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC96AAF422F59DDF00474020 /* MapOverlayManager.swift */; };
 		ACDA9E6622EC620800DC77CA /* Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACDA9E6522EC620800DC77CA /* Button.swift */; };
 /* End PBXBuildFile section */
 
@@ -93,6 +94,7 @@
 		AC96AAEC22F4A8A400474020 /* Geocoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Geocoder.swift; sourceTree = "<group>"; };
 		AC96AAEE22F4C81B00474020 /* RoundButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundButton.swift; sourceTree = "<group>"; };
 		AC96AAF022F5982100474020 /* MarkerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkerManager.swift; sourceTree = "<group>"; };
+		AC96AAF422F59DDF00474020 /* MapOverlayManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapOverlayManager.swift; sourceTree = "<group>"; };
 		ACDA9E6522EC620800DC77CA /* Button.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Button.swift; sourceTree = "<group>"; };
 		AE2C9A74DD9E3BA62C08DFF7 /* Pods-virtual-tourist.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-virtual-tourist.release.xcconfig"; path = "Target Support Files/Pods-virtual-tourist/Pods-virtual-tourist.release.xcconfig"; sourceTree = "<group>"; };
 		CC840F13B824F53FBCC42A76 /* Pods-virtual-tourist.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-virtual-tourist.debug.xcconfig"; path = "Target Support Files/Pods-virtual-tourist/Pods-virtual-tourist.debug.xcconfig"; sourceTree = "<group>"; };
@@ -225,6 +227,7 @@
 		AC4708E322C0AF7000147E5C /* Map */ = {
 			isa = PBXGroup;
 			children = (
+				AC96AAF322F59DCB00474020 /* Overlay */,
 				AC96AAF222F598F300474020 /* Markers */,
 				AC96AAE922F344DF00474020 /* Types */,
 				AC96AAE222F2055A00474020 /* Workers */,
@@ -310,6 +313,14 @@
 				AC96AAF022F5982100474020 /* MarkerManager.swift */,
 			);
 			path = Markers;
+			sourceTree = "<group>";
+		};
+		AC96AAF322F59DCB00474020 /* Overlay */ = {
+			isa = PBXGroup;
+			children = (
+				AC96AAF422F59DDF00474020 /* MapOverlayManager.swift */,
+			);
+			path = Overlay;
 			sourceTree = "<group>";
 		};
 		B17BC0678BC3256D666F14CB /* Pods */ = {
@@ -465,6 +476,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AC96AAF522F59DDF00474020 /* MapOverlayManager.swift in Sources */,
 				AC45934522D0D6700061EBD8 /* PopupState.swift in Sources */,
 				AC4708ED22C0AF9600147E5C /* MapRouterFactory.swift in Sources */,
 				AC96AAEB22F3452600474020 /* Coordinate.swift in Sources */,
