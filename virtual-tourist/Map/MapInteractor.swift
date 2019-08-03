@@ -53,7 +53,10 @@ final class MapInteractor: MapInteracting {
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
                 self?.presenter.preview(locationToDisplay.address)
-                self?.presenter.present(locationToDisplay.photos)
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
+                    self?.presenter.present(locationToDisplay.photos)
+                }
             }
             
             currentLocation.address = locationToDisplay.address
