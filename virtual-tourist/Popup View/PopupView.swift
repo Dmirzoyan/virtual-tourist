@@ -191,6 +191,7 @@ final class PopupView: UIView {
         collectionView.delegate = self
         collectionView.dataSource = dataSource
         collectionView.backgroundColor = .clear
+        collectionView.showsHorizontalScrollIndicator = false
         
         setupCollectionViewGestureRecognizer()
     }

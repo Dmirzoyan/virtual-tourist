@@ -72,7 +72,7 @@ final class MapViewController: UIViewController {
         view.addSubview(deletePinButton)
         
         deletePinButtonBottomConstraint = deletePinButton.bottomAnchor.constraint(
-            equalTo: view.bottomAnchor,
+            equalTo: view.safeAreaLayoutGuide.bottomAnchor,
             constant: -Constants.deletePinButtonBottomPadding
         )
         
