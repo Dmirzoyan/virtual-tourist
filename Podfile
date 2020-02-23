@@ -2,11 +2,15 @@
 # platform :ios, '9.0'
 
 target 'virtual-tourist' do
-  # Comment the next line if you don't want to use dynamic frameworks
   use_frameworks!
-
-  # Pods for virtual-tourist
+  
   pod 'SwiftyJSON'
   pod 'GoogleMaps'
+  
+  target 'virtual-touristTests' do
+    inherit! :search_paths
 
+    pod 'Quick'
+    pod 'Nimble'
+  end
 end

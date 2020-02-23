@@ -4,21 +4,30 @@ PODS:
   - GoogleMaps/Base (3.1.0)
   - GoogleMaps/Maps (3.1.0):
     - GoogleMaps/Base
+  - Nimble (8.0.5)
+  - Quick (2.2.0)
   - SwiftyJSON (5.0.0)
 
 DEPENDENCIES:
   - GoogleMaps
+  - Nimble
+  - Quick
   - SwiftyJSON
 
 SPEC REPOS:
-  https://github.com/cocoapods/specs.git:
+  https://github.com/CocoaPods/Specs.git:
     - GoogleMaps
     - SwiftyJSON
+  trunk:
+    - Nimble
+    - Quick
 
 SPEC CHECKSUMS:
   GoogleMaps: 5c13302e6fe6bb6e686b267196586b91cd594225
+  Nimble: 4ab1aeb9b45553c75b9687196b0fa0713170a332
+  Quick: 7fb19e13be07b5dfb3b90d4f9824c855a11af40e
   SwiftyJSON: 36413e04c44ee145039d332b4f4e2d3e8d6c4db7
 
-PODFILE CHECKSUM: 6bacbda1bddde5b90fab89ded57fd076bf44c5e5
+PODFILE CHECKSUM: a2049e3d2d418a03a927455567613dc27f30d088
 
-COCOAPODS: 1.7.2
+COCOAPODS: 1.8.4

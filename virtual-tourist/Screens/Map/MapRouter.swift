@@ -12,6 +12,7 @@ protocol MapRoute {
     func start()
 }
 
+//sourcery: mock
 protocol MapInternalRoute {}
 
 final class MapRouter: MapRoute {

@@ -6,7 +6,7 @@
 //  Copyright © 2019. All rights reserved.
 //
 
-struct Address {
+struct Address: Equatable {
     let city: String
     let street: String
 }

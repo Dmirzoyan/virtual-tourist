@@ -24,6 +24,7 @@ final class MapDisplayFactory: MapDisplayProducing {
         let interactor = MapInteractor(
             router: router,
             presenter: presenter,
+            imagesApiClient: FlickrApiClient(),
             geocoder: Geocoder(geocoder: GMSGeocoder()),
             locationPersistenceManager: LocationPersistenceManager(dataController: Dependencies.dataController)
         )

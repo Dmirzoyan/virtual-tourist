@@ -9,9 +9,10 @@
 import Foundation
 import CoreData
 
+//sourcery: mock
 protocol LocationPersistenceManaging {
-    func load(completion: ([Pin], Location?) -> Void)
-    func getLocation(for coordinate: Coordinate, completion: (Location?) -> Void)
+    func load(completion: @escaping ([Pin], Location?) -> Void)
+    func getLocation(for coordinate: Coordinate, completion: @escaping (Location?) -> Void)
     func save(_ location: Location)
     func update(_ photos: [Photo], for coordiate: Coordinate)
     func transform(flickrPhotos: [FlickrPhoto]) -> [Photo]
@@ -29,7 +30,7 @@ final class LocationPersistenceManager: LocationPersistenceManaging {
         self.dataController = dataController
     }
     
-    func load(completion: ([Pin], Location?) -> Void) {
+    func load(completion: @escaping ([Pin], Location?) -> Void) {
         let request: NSFetchRequest<Pin> = Pin.fetchRequest()
         let sortDescriptor = NSSortDescriptor(key: "addedDate", ascending: true)
         request.sortDescriptors = [sortDescriptor]
@@ -67,7 +68,7 @@ final class LocationPersistenceManager: LocationPersistenceManaging {
         }
     }
     
-    func getLocation(for coordinate: Coordinate, completion: (Location?) -> Void) {
+    func getLocation(for coordinate: Coordinate, completion: @escaping (Location?) -> Void) {
         guard
             let pin = pin(with: coordinate.latitude, longitude: coordinate.longitude),
             let city = pin.city,

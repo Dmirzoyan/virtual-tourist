@@ -6,7 +6,7 @@
 //  Copyright © 2019. All rights reserved.
 //
 
-struct Coordinate {
+struct Coordinate: Equatable {
     let latitude: Double
     let longitude: Double
 }

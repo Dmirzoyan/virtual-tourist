@@ -10,13 +10,14 @@ import UIKit
 
 typealias SearchPhotosCompletion = ([FlickrPhoto]?, Error?) -> Void
 
+//sourcery: mock
 protocol FlickrApiAccessing {
     func getImages(latitude: Double, longitude: Double, completion: @escaping SearchPhotosCompletion)
 }
 
 final class FlickrApiClient: FlickrApiAccessing {
     
-    private static let apiKey = "Flickr API Key"
+    private static let apiKey = "FLICKR_API_KEY_PLACEHOLDER"
     
     enum Endpoints {
         static let base = "https://api.flickr.com/services/rest/"

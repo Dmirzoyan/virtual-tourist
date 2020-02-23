@@ -23,7 +23,7 @@ final class MapPresenter: MapPresenting {
         self.display = display
     }
     
-    func preview(_ address: Address) {
+    func preview(address: Address) {
         viewState.set {
             $0.set(address: address)
         }
@@ -44,11 +44,11 @@ final class MapPresenter: MapPresenting {
         display?.display(viewState)
     }
     
-    func present(_ pins: [Pin]) {
+    func present(pins: [Pin]) {
         display?.display(pins)
     }
     
-    func present(_ photos: [Photo]) {
+    func present(photos: [Photo]) {
         viewState.set {
             $0.set(isLoading: false)
             $0.items = photos.filter({ $0.title != nil && $0.thumbnailData != nil }).map {

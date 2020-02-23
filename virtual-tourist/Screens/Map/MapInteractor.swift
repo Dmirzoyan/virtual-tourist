@@ -8,10 +8,11 @@
 
 import Foundation
 
+//sourcery: mock
 protocol MapPresenting {
-    func preview(_ address: Address)
-    func present(_ photos: [Photo])
-    func present(_ pins: [Pin])
+    func preview(address: Address)
+    func present(photos: [Photo])
+    func present(pins: [Pin])
     func presentAlert(with message: String)
     func presentLoadingProgress()
 }
@@ -20,6 +21,7 @@ final class MapInteractor: MapInteracting {
     
     private let router: MapInternalRoute
     private let presenter: MapPresenting
+    private let imagesApiClient: FlickrApiAccessing
     private let geocoder: Geocoding
     private let locationPersistenceManager: LocationPersistenceManaging
     
@@ -32,11 +34,13 @@ final class MapInteractor: MapInteracting {
     init(
         router: MapInternalRoute,
         presenter: MapPresenting,
+        imagesApiClient: FlickrApiAccessing,
         geocoder: Geocoding,
         locationPersistenceManager: LocationPersistenceManaging
     ) {
         self.router = router
         self.presenter = presenter
+        self.imagesApiClient = imagesApiClient
         self.geocoder = geocoder
         self.locationPersistenceManager = locationPersistenceManager
     }
@@ -45,35 +49,35 @@ final class MapInteractor: MapInteracting {
         locationPersistenceManager.load { [weak self] pins, locationToDisplay in
             guard let locationToDisplay = locationToDisplay
             else {
-                presenter.presentAlert(with: "Failed loading saved locations!")
+                self?.presenter.presentAlert(with: "Failed loading saved locations!")
                 return
             }
             
-            self?.presenter.present(pins)
+            self?.presenter.present(pins: pins)
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
-                self?.presenter.preview(locationToDisplay.address)
+                self?.presenter.preview(address: locationToDisplay.address)
                 
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
-                    self?.presenter.present(locationToDisplay.photos)
+                    self?.presenter.present(photos: locationToDisplay.photos)
                 }
             }
             
-            currentLocation.address = locationToDisplay.address
-            currentLocation.coordinate = locationToDisplay.coordinate
+            self?.currentLocation.address = locationToDisplay.address
+            self?.currentLocation.coordinate = locationToDisplay.coordinate
         }
     }
     
     func viewSavedLocation(for coordinate: Coordinate) {
-        locationPersistenceManager.getLocation(for: coordinate) { location in
+        locationPersistenceManager.getLocation(for: coordinate) { [weak self] location in
             guard let location = location
             else { return }
             
-            presenter.preview(location.address)
-            presenter.present(location.photos)
+            self?.presenter.preview(address: location.address)
+            self?.presenter.present(photos: location.photos)
             
-            currentLocation.address = location.address
-            currentLocation.coordinate = location.coordinate
+            self?.currentLocation.address = location.address
+            self?.currentLocation.coordinate = location.coordinate
         }
     }
     
@@ -85,7 +89,7 @@ final class MapInteractor: MapInteracting {
             else { return }
             
             self?.currentLocation.address = address
-            self?.presenter.preview(address)
+            self?.presenter.preview(address: address)
         }
         
         loadImages(for: coordinate) { [weak self] photos in
@@ -118,7 +122,7 @@ final class MapInteractor: MapInteracting {
     }
     
     private func loadImages(for coordinate: Coordinate, completion: @escaping ([Photo]) -> Void) {
-        FlickrApiClient().getImages(
+        imagesApiClient.getImages(
             latitude: coordinate.latitude,
             longitude: coordinate.longitude
         ) { [weak self] flickrPhotos, error in
@@ -126,13 +130,13 @@ final class MapInteractor: MapInteracting {
                 error == nil,
                 let strongSelf = self,
                 let flickrPhotos = flickrPhotos
-                else {
+            else {
                     self?.presenter.presentAlert(with: "Could not retrieve images")
                     return
             }
             
             let photos = strongSelf.locationPersistenceManager.transform(flickrPhotos: flickrPhotos)
-            strongSelf.presenter.present(photos)
+            strongSelf.presenter.present(photos: photos)
             
             completion(photos)
         }

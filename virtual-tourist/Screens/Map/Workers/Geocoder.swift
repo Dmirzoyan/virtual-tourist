@@ -8,6 +8,7 @@
 
 import GoogleMaps
 
+//sourcery: mock
 protocol Geocoding {
     func reverseGeocodeCoordinate(
         _ coordinate: Coordinate,
